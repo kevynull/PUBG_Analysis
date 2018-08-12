@@ -1,0 +1,38 @@
+.heat-map-amount-bar {
+    position: relative;
+    width: 100%;
+    height: 15px;
+    background: -webkit-gradient(linear,left top,right top,from(#4e7eff),color-stop(38%,#4aeb6c),color-stop(68%,#fff200),to(#f44));
+    background: linear-gradient(90deg,#4e7eff,#4aeb6c 38%,#fff200 68%,#f44);
+}
+.heat-map-left-txt{
+    position: absolute;
+    left: 0;
+    bottom: -25px;
+}
+
+.heat-map-right-txt{
+    position: absolute;
+    right: 0;
+    bottom: -25px;
+}
+
+.map-erangel{
+    background: url('../image/map/erangel.jpg') no-repeat;background-size:100% 100%;
+}
+
+.map-miramar{
+    background: url('../image/map/miramar.jpg') no-repeat;background-size:100% 100%;
+}
+
+.map-size{
+    height: 600px;
+    width: 600px;
+}
+
+@media (min-width: 768px) {
+    .map-size{
+        height: 800px;
+        width: 800px;
+    }
+}

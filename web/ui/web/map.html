@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+<!--     <link rel="icon" href="../../../../favicon.ico"> -->
+
+    <title>(╯‵□′)╯︵┻━┻ </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet"> -->
+    <link href="css/googleapis.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/map.css" rel="stylesheet">
+    <link href="icons/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <header class="pubg-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1">
+            <a class="text-muted" href="https://pubg.op.gg">OP.GG</a>
+          </div>
+          <div class="col-4 text-center">
+            <a class="pubg-header-logo text-dark" href="#">PUBG数据分析</a>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="text-muted" href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-3"><circle cx="10.5" cy="10.5" r="7.5"></circle><line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
+            </a>
+            <a class="btn btn-sm btn-outline-secondary" href="#">GITHUB</a>
+          </div>
+        </div>
+      </header>
+
+      <div class="nav-scroller py-1 mb-2">
+        <nav class="nav d-flex justify-content-between">
+          <a class="p-2 text-muted" href="index.html">首页</a>
+          <a class="p-2 text-muted" href="day.html">游戏统计</a>
+          <a class="p-2 text-muted" href="list.html">玩家列表</a>
+          <a class="p-2 text-muted" href="duration.html">时长占比</a>
+          <a class="p-2 text-muted" href="achievements.html">玩家成就</a>
+          <a class="p-2 text-muted" href="map.html">地图热点</a>
+          <a class="p-2 text-muted" href="rankings.html">排行榜</a>
+          <a class="p-2 text-muted" href="weapons.html">武器分析</a>
+          <a class="p-2 text-muted" href="marker.html">数据埋点</a>
+          <a class="p-2 text-muted" href="#">玩家画像</a>
+          <a class="p-2 text-muted" target="_blank" href="https://magiatelier.link/about/">关于</a>
+          <a class="p-2 text-muted" href="#">??></a>
+        </nav>
+      </div>
+      
+      <!-- 战斗热点图（全部数据）【添加时间轴，游戏进行中，热点的增长】 -->
+      <main role="main" class="container" style="margin-bottom: 2rem;">
+        <div class="row">
+          <div id="map_box" class="map-erangel map-size"></div>
+          <!-- map tools -->
+          <div class=" p-3 bg-light rounded box-shadow  col-md-3" style="margin-left: 1rem;">
+            <h6 class="border-bottom border-gray pb-2 mb-0">
+              <button type="button" class="btn btn-outline-success active">Erangel</button>
+                <button type="button" class="btn btn-outline-dark">Miramar</button>
+            </h6>
+            <!-- 死亡区域热点 (主题)-->
+            <!-- 武器击杀热点 (主题)(选择武器，武器顺序按使用热度 排名)-->
+            <!-- 时间轴 -->
+            <div class="border-bottom border-gray" style="padding-top: 10px;padding-bottom: 20px;">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                <label class="form-check-label" for="exampleRadios1">
+                  死亡区域热点
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                <label class="form-check-label" for="exampleRadios2">
+                  武器击杀热点
+                </label>
+                <select class="form-control form-control-sm" >
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="border-bottom border-gray" style="padding-top: 10px;padding-bottom: 20px;">
+              <div class="text-center">
+                <span class="oi oi-media-play" title="media-play" aria-hidden="true"></span>
+                <!-- media-pause -->
+                <!-- media-skip-backward -->
+                <!-- media-skip-forward -->
+              </div>
+              <div id="slider"></div>
+            </div>
+            <div class="media text-muted pt-3 ">
+              <div class="heat-map-desc" style="width: 100%;">
+                  <div class="heat-map-amount-bar">
+                      <span class="heat-map-left-txt">Low</span>
+                      <span class="heat-map-right-txt">High</span>
+                  </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- /.map tools -->
+        </div>
+      </main><!-- /.container -->
+
+
+    <footer class="pubg-footer">
+      <p>Edit for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+      <p>konami code</p>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script>window.jQuery || document.write('<script src="js/assets/jquery.js"><\/script>')</script>
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="js/assets/popper.min.js"></script>
+    <script type="text/javascript" src="js/assets/heatmap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <!-- 占位图生成器 start -->
+    <script src="js/assets/holder.min.js"></script>
+    <script>
+      Holder.addTheme('thumb', {
+        bg: '#55595c',
+        fg: '#eceeef',
+        text: 'Thumbnail'
+      });
+    </script>
+    <!-- 占位图生成器 end -->
+    <script type="text/javascript">
+      $("#slider").slider();
+    </script>
+        <script type="text/javascript">
+var heatmapInstance = h337.create({
+  // only container is required, the rest will be defaults
+  container: document.getElementById('map_box')
+});
+
+// now generate some random data
+var points = [];
+var max = 0;
+var width = $("#map_box").width();
+var height = $("#map_box").height();
+var len = 100;
+
+while (len--) {
+  var val = Math.floor(Math.random()*100);
+  // now also with custom radius
+  var radius = Math.floor(Math.random()*70);
+
+  max = Math.max(max, val);
+  var point = {
+    x: Math.floor(Math.random()*width),
+    y: Math.floor(Math.random()*height),
+    value: val,
+    // radius configuration on point basis
+    radius: radius
+  };
+  points.push(point);
+}
+
+// heatmap data format
+// for (var i = 0 ; i < 10 ; ++i){
+//     var point = {
+//     x: 271,
+//     y: 225,
+//     value: 30,
+//     // radius configuration on point basis
+//     radius: 5
+//   };
+//     points.push(point);
+// }
+var data = { 
+  max: max, 
+  data: points 
+};
+//console.log(points);
+// if you have a set of datapoints always use setData instead of addData
+// for data initialization
+heatmapInstance.setData(data);
+    </script>
+  </body>
+</html>
+<!--  
+http://echarts.baidu.com/examples/editor.html?c=line-aqi
+http://echarts.baidu.com/examples/editor.html?c=scatter-weight
+ -->

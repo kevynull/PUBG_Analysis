@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+<!--     <link rel="icon" href="../../../../favicon.ico"> -->
+
+    <title>(╯‵□′)╯︵┻━┻ </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet"> -->
+    <link href="css/googleapis.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <header class="pubg-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1">
+            <a class="text-muted" href="https://pubg.op.gg">OP.GG</a>
+          </div>
+          <div class="col-4 text-center">
+            <a class="pubg-header-logo text-dark" href="#">PUBG数据分析</a>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="text-muted" href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-3"><circle cx="10.5" cy="10.5" r="7.5"></circle><line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
+            </a>
+            <a class="btn btn-sm btn-outline-secondary" href="#">GITHUB</a>
+          </div>
+        </div>
+      </header>
+
+      <div class="nav-scroller py-1 mb-2">
+        <nav class="nav d-flex justify-content-between">
+          <a class="p-2 text-muted" href="index.html">首页</a>
+          <a class="p-2 text-muted" href="day.html">游戏统计</a>
+          <a class="p-2 text-muted" href="list.html">玩家列表</a>
+          <a class="p-2 text-muted" href="duration.html">时长占比</a>
+          <a class="p-2 text-muted" href="achievements.html">玩家成就</a>
+          <a class="p-2 text-muted" href="map.html">地图热点</a>
+          <a class="p-2 text-muted" href="rankings.html">排行榜</a>
+          <a class="p-2 text-muted" href="weapons.html">武器分析</a>
+          <a class="p-2 text-muted" href="marker.html">数据埋点</a>
+          <a class="p-2 text-muted" href="#">玩家画像</a>
+          <a class="p-2 text-muted" target="_blank" href="https://magiatelier.link/about/">关于</a>
+          <a class="p-2 text-muted" href="#">??></a>
+        </nav>
+      </div>
+      <!-- style="background: url('image/home_title.png') no-repeat;" -->
+      <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" >
+        <div class="col-md-6 px-0">
+          <h1 class="display-5  font-weight-bold">数据源说明</h1>
+          <p class="lead my-3">此统计分析的数据来源是kaggle上发布的PUBG统计数据，总共统计了720k局的游戏数据，但是这些数据不具有时效性。仅作为学习使用。</p>
+
+          <p class="lead mb-0"><a href="https://www.kaggle.com/skihikingkevin/pubg-match-deaths" class="display-6 font-italic text-white font-weight-bold">数据源</a></p>
+        </div>
+      </div>
+
+      <!-- 随机抽取2个玩家信息 -->
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+              <!-- 称号，随机 -->
+              <strong class="d-inline-block mb-2 text-primary">幸存者</strong>
+              <h3 class="mb-0">
+                <a class="text-dark" href="#">asdfjju33</a>
+              </h3>
+              <!-- 排行榜 -->
+              <div class="mb-1 text-muted">top 233</div>
+              <p class="card-text mb-auto"><b>asdfjju33</b>生涯击杀35人，死亡45次，K/D比打败了37.5%的玩家，和咸鱼没有什么分别。</p>
+              <a href="#">生涯</a>
+            </div>
+            <div class="card-img-right flex-auto d-none d-md-block" id="user_radar" style="height: 250px;width: 200px;">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+              <strong class="d-inline-block mb-2 text-success">Design</strong>
+              <h3 class="mb-0">
+                <a class="text-dark" href="#">Post title</a>
+              </h3>
+              <div class="mb-1 text-muted">Nov 11</div>
+              <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+              <a href="#">Continue reading</a>
+            </div>
+            <img class="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Card image cap">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8 pubg-main">
+          <h3 class="pb-3 mb-4 font-italic border-bottom font-weight-bold">
+            游戏分析 <!-- 每局游戏游戏数据 -->
+          </h3>
+
+          <div class="pubg-post">
+            <h2 class="pubg-post-title">“吃鸡”者： asdifjeeekds</h2>
+            <p class="pubg-post-meta">2017-10-31 02:41:53 by <a href="#">more</a></p><!-- 跳转到单局分析 -->
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>击杀者</th>
+                      <th>受害者</th>
+                      <th>武器</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1,001</td>
+                      <td>Lorem</td>
+                      <td>ipsum</td>
+                      <td>dolor</td>
+                    </tr>
+                    <tr>
+                      <td>1,002</td>
+                      <td>amet</td>
+                      <td>consectetur</td>
+                      <td>adipiscing</td>
+                    </tr>
+                    <tr>
+                      <td>1,003</td>
+                      <td>Integer</td>
+                      <td>nec</td>
+                      <td>odio</td>
+                    </tr>
+                    <tr>
+                      <td>1,003</td>
+                      <td>libero</td>
+                      <td>Sed</td>
+                      <td>cursus</td>
+                    </tr>
+                    <tr>
+                      <td>1,004</td>
+                      <td>dapibus</td>
+                      <td>diam</td>
+                      <td>Sed</td>
+                    </tr>
+                    <tr>
+                      <td>1,005</td>
+                      <td>Nulla</td>
+                      <td>quis</td>
+                      <td>sem</td>
+                    </tr>
+                    <tr>
+                      <td>1,006</td>
+                      <td>nibh</td>
+                      <td>elementum</td>
+                      <td>imperdiet</td>
+                    </tr>
+                    <tr>
+                      <td>1,007</td>
+                      <td>sagittis</td>
+                      <td>ipsum</td>
+                      <td>Praesent</td>
+                    </tr>
+                    <tr>
+                      <td>1,008</td>
+                      <td>Fusce</td>
+                      <td>nec</td>
+                      <td>tellus</td>
+                    </tr>
+                    <tr>
+                      <td>1,009</td>
+                      <td>augue</td>
+                      <td>semper</td>
+                      <td>porta</td>
+                    </tr>
+                    <tr>
+                      <td>1,010</td>
+                      <td>massa</td>
+                      <td>Vestibulum</td>
+                      <td>lacinia</td>
+                    </tr>
+                    <tr>
+                      <td>1,011</td>
+                      <td>eget</td>
+                      <td>nulla</td>
+                      <td>Class</td>
+                    </tr>
+                    <tr>
+                      <td>1,012</td>
+                      <td>taciti</td>
+                      <td>sociosqu</td>
+                      <td>ad</td>
+                    </tr>
+                    <tr>
+                      <td>1,013</td>
+                      <td>torquent</td>
+                      <td>per</td>
+                      <td>conubia</td>
+                    </tr>
+                    <tr>
+                      <td>1,014</td>
+                      <td>per</td>
+                      <td>inceptos</td>
+                      <td>himenaeos</td>
+                    </tr>
+                    <tr>
+                      <td>1,015</td>
+                      <td>sodales</td>
+                      <td>ligula</td>
+                      <td>in</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div><!-- /.pubg-post -->
+
+          <div class="pubg-post">
+            <h2 class="pubg-post-title">“吃鸡”者： asdifjeeekds</h2>
+            <p class="pubg-post-meta">2017-10-31 02:41:53 by <a href="#">more</a></p><!-- 跳转到单局分析 -->
+<div class="table-responsive">
+                <table class="table table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>击杀者</th>
+                      <th>受害者</th>
+                      <th>武器</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1,001</td>
+                      <td>Lorem</td>
+                      <td>ipsum</td>
+                      <td>dolor</td>
+                    </tr>
+                    <tr>
+                      <td>1,002</td>
+                      <td>amet</td>
+                      <td>consectetur</td>
+                      <td>adipiscing</td>
+                    </tr>
+                    <tr>
+                      <td>1,003</td>
+                      <td>Integer</td>
+                      <td>nec</td>
+                      <td>odio</td>
+                    </tr>
+                    <tr>
+                      <td>1,003</td>
+                      <td>libero</td>
+                      <td>Sed</td>
+                      <td>cursus</td>
+                    </tr>
+                    <tr>
+                      <td>1,004</td>
+                      <td>dapibus</td>
+                      <td>diam</td>
+                      <td>Sed</td>
+                    </tr>
+                    <tr>
+                      <td>1,005</td>
+                      <td>Nulla</td>
+                      <td>quis</td>
+                      <td>sem</td>
+                    </tr>
+                    <tr>
+                      <td>1,006</td>
+                      <td>nibh</td>
+                      <td>elementum</td>
+                      <td>imperdiet</td>
+                    </tr>
+                    <tr>
+                      <td>1,007</td>
+                      <td>sagittis</td>
+                      <td>ipsum</td>
+                      <td>Praesent</td>
+                    </tr>
+                    <tr>
+                      <td>1,008</td>
+                      <td>Fusce</td>
+                      <td>nec</td>
+                      <td>tellus</td>
+                    </tr>
+                    <tr>
+                      <td>1,009</td>
+                      <td>augue</td>
+                      <td>semper</td>
+                      <td>porta</td>
+                    </tr>
+                    <tr>
+                      <td>1,010</td>
+                      <td>massa</td>
+                      <td>Vestibulum</td>
+                      <td>lacinia</td>
+                    </tr>
+                    <tr>
+                      <td>1,011</td>
+                      <td>eget</td>
+                      <td>nulla</td>
+                      <td>Class</td>
+                    </tr>
+                    <tr>
+                      <td>1,012</td>
+                      <td>taciti</td>
+                      <td>sociosqu</td>
+                      <td>ad</td>
+                    </tr>
+                    <tr>
+                      <td>1,013</td>
+                      <td>torquent</td>
+                      <td>per</td>
+                      <td>conubia</td>
+                    </tr>
+                    <tr>
+                      <td>1,014</td>
+                      <td>per</td>
+                      <td>inceptos</td>
+                      <td>himenaeos</td>
+                    </tr>
+                    <tr>
+                      <td>1,015</td>
+                      <td>sodales</td>
+                      <td>ligula</td>
+                      <td>in</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div><!-- /.pubg-post -->
+
+          <div class="pubg-post">
+            <h2 class="pubg-post-title">“吃鸡”者： asdifjeeekds</h2>
+            <p class="pubg-post-meta">2017-10-31 02:41:53 by <a href="#">more</a></p><!-- 跳转到单局分析 -->
+
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>击杀者</th>
+                      <th>受害者</th>
+                      <th>武器</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1,001</td>
+                      <td>Lorem</td>
+                      <td>ipsum</td>
+                      <td>dolor</td>
+                    </tr>
+                    <tr>
+                      <td>1,002</td>
+                      <td>amet</td>
+                      <td>consectetur</td>
+                      <td>adipiscing</td>
+                    </tr>
+                    <tr>
+                      <td>1,003</td>
+                      <td>Integer</td>
+                      <td>nec</td>
+                      <td>odio</td>
+                    </tr>
+                    <tr>
+                      <td>1,003</td>
+                      <td>libero</td>
+                      <td>Sed</td>
+                      <td>cursus</td>
+                    </tr>
+                    <tr>
+                      <td>1,004</td>
+                      <td>dapibus</td>
+                      <td>diam</td>
+                      <td>Sed</td>
+                    </tr>
+                    <tr>
+                      <td>1,005</td>
+                      <td>Nulla</td>
+                      <td>quis</td>
+                      <td>sem</td>
+                    </tr>
+                    <tr>
+                      <td>1,006</td>
+                      <td>nibh</td>
+                      <td>elementum</td>
+                      <td>imperdiet</td>
+                    </tr>
+                    <tr>
+                      <td>1,007</td>
+                      <td>sagittis</td>
+                      <td>ipsum</td>
+                      <td>Praesent</td>
+                    </tr>
+                    <tr>
+                      <td>1,008</td>
+                      <td>Fusce</td>
+                      <td>nec</td>
+                      <td>tellus</td>
+                    </tr>
+                    <tr>
+                      <td>1,009</td>
+                      <td>augue</td>
+                      <td>semper</td>
+                      <td>porta</td>
+                    </tr>
+                    <tr>
+                      <td>1,010</td>
+                      <td>massa</td>
+                      <td>Vestibulum</td>
+                      <td>lacinia</td>
+                    </tr>
+                    <tr>
+                      <td>1,011</td>
+                      <td>eget</td>
+                      <td>nulla</td>
+                      <td>Class</td>
+                    </tr>
+                    <tr>
+                      <td>1,012</td>
+                      <td>taciti</td>
+                      <td>sociosqu</td>
+                      <td>ad</td>
+                    </tr>
+                    <tr>
+                      <td>1,013</td>
+                      <td>torquent</td>
+                      <td>per</td>
+                      <td>conubia</td>
+                    </tr>
+                    <tr>
+                      <td>1,014</td>
+                      <td>per</td>
+                      <td>inceptos</td>
+                      <td>himenaeos</td>
+                    </tr>
+                    <tr>
+                      <td>1,015</td>
+                      <td>sodales</td>
+                      <td>ligula</td>
+                      <td>in</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div><!-- /.pubg-post -->
+
+          <nav class="pubg-pagination">
+            <a class="btn btn-outline-primary" href="#">Older</a>
+            <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+          </nav>
+
+        </div><!-- /.pubg-main -->
+
+        <aside class="col-md-4 pubg-sidebar">
+          <div class="p-3 mb-3 bg-light rounded">
+            <h4 class="font-italic font-weight-bold">数据校准</h4>
+            <p class="mb-0">据统计该游戏中，总共发起了 <em>725610</em> 场大逃杀。<em>650000</em> 人参与，
+                照成了 <em>650000</em> 人死亡，其中 
+                <em>45866</em> 死于 <em>98K</em>，
+                <em>1422344</em> 死于 <em>AR-15</em>，
+                <em>1422344</em> 死于 <em>中毒</em>，
+                <em>1422344</em> 死于 <em>掉线</em>，
+                玩家平均游戏时间 <em>233</em> 小时，
+                玩家平均击杀数 <em>233</em> 人，
+            </p>
+          </div>
+
+          <div class="p-3">
+            <h4 class="font-italic font-weight-bold">单局游戏排行榜</h4>
+            <ol class="list-unstyled mb-0">
+              <li>单局游戏存活最长的玩家:<a href="#">asjdifdkkkd</a></li>
+              <li>单局游戏击杀最多的玩家:<a href="#">asjdifdkkkd</a></li>
+              <li>单局游戏伤害最高的玩家:<a href="#">asjdifdkkkd</a></li>
+              <li>单局游戏跑马拉松的玩家:<a href="#">asjdifdkkkd</a></li>
+              <li>单局游戏喜欢飙车的玩家:<a href="#">asjdifdkkkd</a></li>
+              <li>单局游戏最远击杀的玩家:<a href="#">asjdifdkkkd</a></li>
+            </ol>
+          </div>
+
+          <div class="p-3">
+            <h4>(。・∀・)ノ了解一下</h4>
+            <ol class="list-unstyled">
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Coding</a></li>
+              <li><a href="#">Github</a></li>
+            </ol>
+          </div>
+        </aside><!-- /.pubg-sidebar -->
+
+      </div><!-- /.row -->
+
+    </main><!-- /.container -->
+
+    <footer class="pubg-footer">
+      <p>Edit for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+      <p>konami code</p>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script>window.jQuery || document.write('<script src="js/assets/jquery.js"><\/script>')</script>
+    <script src="js/assets/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <!-- 占位图生成器 start -->
+    <script src="js/assets/holder.min.js"></script>
+    <script>
+      Holder.addTheme('thumb', {
+        bg: '#55595c',
+        fg: '#eceeef',
+        text: 'Thumbnail'
+      });
+    </script>
+    <!-- 占位图生成器 end -->
+
+    <script type="text/javascript">
+        // Schema:
+// date,AQIindex,PM2.5,PM10,CO,NO2,SO2
+var dataBJ = [
+    [55,9,56,0.46,18,6,1],
+    [25,11,21,0.65,34,9,2],
+    [56,7,63,0.3,14,5,3],
+    [33,7,29,0.33,16,6,4],
+    [42,24,44,0.76,40,16,5],
+    [82,58,90,1.77,68,33,6],
+    [74,49,77,1.46,48,27,7],
+    [78,55,80,1.29,59,29,8],
+    [267,216,280,4.8,108,64,9],
+    [185,127,216,2.52,61,27,10],
+    [39,19,38,0.57,31,15,11],
+    [41,11,40,0.43,21,7,12],
+    [64,38,74,1.04,46,22,13],
+    [108,79,120,1.7,75,41,14],
+    [108,63,116,1.48,44,26,15],
+    [33,6,29,0.34,13,5,16],
+    [94,66,110,1.54,62,31,17],
+    [186,142,192,3.88,93,79,18],
+    [57,31,54,0.96,32,14,19],
+    [22,8,17,0.48,23,10,20],
+    [39,15,36,0.61,29,13,21],
+    [94,69,114,2.08,73,39,22],
+    [99,73,110,2.43,76,48,23],
+    [31,12,30,0.5,32,16,24],
+    [42,27,43,1,53,22,25],
+    [154,117,157,3.05,92,58,26],
+    [234,185,230,4.09,123,69,27],
+
+];
+
+
+var lineStyle = {
+    normal: {
+        width: 1,
+        opacity: 0.5
+    }
+};
+
+var dom = document.getElementById("user_radar");
+var myChart = echarts.init(dom);
+
+myChart.setOption(option = {
+    backgroundColor: '#55595c',
+    title: {
+        show: false,
+        text: 'AQI - 雷达图',
+        left: 'center',
+        textStyle: {
+            color: '#eee'
+        }
+    },
+    // legend: {
+    //     bottom: 5,
+    //     data: ['北京', '上海', '广州'],
+    //     itemGap: 20,
+    //     textStyle: {
+    //         color: '#fff',
+    //         fontSize: 14
+    //     },
+    //     selectedMode: 'single'
+    // },
+    // visualMap: {
+    //     show: true,
+    //     min: 0,
+    //     max: 20,
+    //     dimension: 6,
+    //     inRange: {
+    //         colorLightness: [0.5, 0.8]
+    //     }
+    // },
+    radar: {
+        radius: '70%',
+        indicator: [
+            {name: '击杀', max: 300},
+            {name: '死亡', max: 250},
+            {name: '步行', max: 300},
+            {name: '评分', max: 5},
+            {name: '生存', max: 200},
+            {name: '载具', max: 200}
+
+        ],
+        shape: 'circle',
+        splitNumber: 5,
+        name: {
+            textStyle: {
+                color: 'rgb(238, 197, 102)'/*,
+                backgroundColor: '#666',
+                borderRadius: 1,
+                padding: [3, 20]*/
+            }
+        },
+        splitLine: {
+            lineStyle: {
+                color: [
+                    'rgba(238, 197, 102, 0.1)', 'rgba(238, 197, 102, 0.2)',
+                    'rgba(238, 197, 102, 0.4)', 'rgba(238, 197, 102, 0.6)',
+                    'rgba(238, 197, 102, 0.8)', 'rgba(238, 197, 102, 1)'
+                ].reverse()
+            }
+        },
+        splitArea: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: 'rgba(238, 197, 102, 0.5)'
+            }
+        }
+    },
+    series: [
+        {
+            
+            name: '北京',
+            type: 'radar',
+            lineStyle: lineStyle,
+            data: dataBJ,
+            symbol: 'none',
+            itemStyle: {
+                normal: {
+                    color: '#F9713C'
+                }
+            },
+            areaStyle: {
+                normal: {
+                    opacity: 0.1
+                }
+            }
+        }
+    ]
+});
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+    </script>
+  </body>
+</html>

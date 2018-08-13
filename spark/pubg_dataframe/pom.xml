@@ -19,7 +19,7 @@
           <groupId>org.scala-lang</groupId>
           <artifactId>scala-library</artifactId>
           <version>${scala.version}</version>
-          <scope>provided</scope>
+          <!--<scope>provided</scope>-->
       </dependency>
 
       <!-- sparkSQL -->
@@ -27,21 +27,21 @@
           <groupId>org.apache.spark</groupId>
           <artifactId>spark-sql_2.11</artifactId>
           <version>${spark.version}</version>
-          <scope>provided</scope>
+          <!--<scope>provided</scope>-->
       </dependency>
 
       <dependency>
           <groupId>org.apache.spark</groupId>
           <artifactId>spark-hive_2.11</artifactId>
           <version>${spark.version}</version>
-          <scope>provided</scope>
+          <!--<scope>provided</scope>-->
       </dependency>
 
       <dependency>
           <groupId>org.spark-project.hive</groupId>
           <artifactId>hive-jdbc</artifactId>
           <version>1.2.1.spark2</version>
-          <scope>provided</scope>
+          <!--<scope>provided</scope>-->
       </dependency>
 
       <dependency>

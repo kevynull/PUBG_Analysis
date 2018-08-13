@@ -52,10 +52,14 @@ object FdmLoadDataForBdm {
       val hour = DateUtils.parseHour(timestamp).toInt
       val minute = DateUtils.parseMinute(timestamp).toInt
       val seconds = DateUtils.parseSeconds(timestamp).toInt
+      var isUseRide = 0
+      if (line.player_dist_ride > 0) {
+        isUseRide = 1
+      }
       FdmAggMatchWide(date, time, year, month, day, hour, minute, seconds, line.game_size, line.match_id,
         line.match_mode, line.party_size, line.player_assists, line.player_dbno, line.player_dist_ride,
         line.player_dist_walk, line.player_dmg, line.player_kills, line.player_name, line.player_survive_time,
-        line.team_id, line.team_placement
+        line.team_id, line.team_placement, isUseRide
       )
     })
     agg_wide.write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)

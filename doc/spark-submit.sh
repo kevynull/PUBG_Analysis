@@ -39,6 +39,16 @@ spark-submit \
 --conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+spark-submit \
+--class com.pubg.gdm.GdmKillMatchStatsPageviewApp \
+--name GdmKillMatchStatsPageviewApp \
+--master yarn-cluster \
+--executor-memory 2G \
+--num-executors 1 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
 
 # --conf spark.io.compression.codec=lz4 启用压缩，减小内存使用量
 # 

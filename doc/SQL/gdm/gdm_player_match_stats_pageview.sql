@@ -11,5 +11,10 @@ create table gdm_player_match_stats_pageview(
 `player_kills` INT,                     --玩家击杀数
 `player_name` STRING,                      --玩家名字
 `player_suvive_time` DOUBLE               --玩家生存时间（秒）
+`is_party_team` INT,                    --是否组队
+`party_size` INT,                       --组队人数
+`is_winner` INT,                        --是否胜利
+`is_use_ride` INT,                      --是否使用载具
+`team_placement` INT
 )
 partitioned by (`date` STRING)

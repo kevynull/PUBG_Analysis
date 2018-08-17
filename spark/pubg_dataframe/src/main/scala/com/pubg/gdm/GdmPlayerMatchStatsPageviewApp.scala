@@ -59,6 +59,7 @@ object GdmPlayerMatchStatsPageviewApp {
       aggWide.col("time"),
       aggWide.col("match_id"),
       aggWide.col("match_mode"),
+      aggWide.col("party_size"),
       aggWide.col("player_assists"),
       aggWide.col("player_dbno"),
       aggWide.col("player_dist_ride"),
@@ -67,12 +68,24 @@ object GdmPlayerMatchStatsPageviewApp {
       aggWide.col("player_kills"),
       aggWide.col("player_name"),
       aggWide.col("player_suvive_time"),
+      aggWide.col("team_placement"),
+      aggWide.col("is_use_ride"),
       killShotDis.col("shot_distance")
     ).map(line => {
       val date = line.getAs[String]("date")
       val time = line.getAs[String]("time")
       val pubg_opgg_id = line.getAs[String]("match_id")
       val match_mode = line.getAs[String]("match_mode")
+      val party_size = line.getAs[Int]("party_size")
+      var is_party_team = 0
+      if (party_size > 1){
+        is_party_team = 1
+      }
+      val team_placement = line.getAs[Int]("team_placement")
+      var is_winner = 0
+      if (team_placement == 1){
+        is_winner = 1
+      }
       val maximum_shot_distance = line.getAs[Double]("shot_distance")
       val player_assists = line.getAs[Int]("player_assists")
       val player_dbno = line.getAs[Int]("player_dbno")
@@ -82,9 +95,11 @@ object GdmPlayerMatchStatsPageviewApp {
       val player_kills = line.getAs[Int]("player_kills")
       val player_name = line.getAs[String]("player_name")
       val player_suvive_time = line.getAs[Double]("player_suvive_time")
+      val is_use_ride = line.getAs[Int]("is_use_ride")
 
       GdmPlayerMatchStatsPageview(date, time, pubg_opgg_id, match_mode, maximum_shot_distance, player_assists,
-        player_dbno, player_dist_ride, player_dist_walk, player_dmg, player_kills, player_name, player_suvive_time)
+        player_dbno, player_dist_ride, player_dist_walk, player_dmg, player_kills, player_name, player_suvive_time,
+        is_party_team,party_size,is_winner,is_use_ride,team_placement)
     }).write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
 
   }

@@ -48,5 +48,7 @@ case class FdmAggMatchWide(
   player_suvive_time: Double,
   team_id: Int,
   team_placement: Int,
-  is_use_ride: Int
+  is_use_ride: Int,
+  is_win: Int,
+  is_team: Int
 )

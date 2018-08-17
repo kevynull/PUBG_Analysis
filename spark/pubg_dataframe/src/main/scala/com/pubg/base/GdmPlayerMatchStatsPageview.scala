@@ -16,6 +16,10 @@ package com.pubg.base
   * @param player_kills
   * @param player_name
   * @param player_suvive_time
+  * @param is_party_team
+  * @param party_size
+  * @param is_winner
+  * @param is_use_ride
   */
 case class GdmPlayerMatchStatsPageview(
    date: String,
@@ -30,5 +34,10 @@ case class GdmPlayerMatchStatsPageview(
    player_dmg: Int,
    player_kills: Int,
    player_name: String,
-   player_suvive_time: Double
+   player_suvive_time: Double,
+   is_party_team: Int,
+   party_size: Int,
+   is_winner: Int,
+   is_use_ride: Int,
+   team_placement: Int
  )

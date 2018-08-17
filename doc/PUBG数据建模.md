@@ -8,7 +8,7 @@
 
 ```SQL
 date,                             --日期
-game_size,                        --进场游戏人数
+game_size,                        --团队总数
 match_id,                         --匹配ID（pubg战绩pubg.op.gg查询ID）
 match_mode,                       --匹配模式
 party_size,                       --组队人数（是单排，还是开黑）
@@ -54,14 +54,14 @@ victim_position_y                 --受害者位置Y坐标
 
 ```SQL
 date,                             --分区字段，格式：yyyy-mm-dd
-time,                             --[date]处理字段，格式：hh-MM-ss
+time,                             --[date]处理字段，格式：hh:MM:ss
 year,                             --[date]处理字段，年
 month,                            --[date]处理字段，月
 day,                              --[date]处理字段，日
 hour,                             --[date]处理字段，时
 minute,                           --[date]处理字段，分
 seconds,                          --[date]处理字段，秒
-game_size,                        --进场游戏人数
+game_size,                        --团队总数
 match_id,                         --匹配ID（pubg战绩pubg.op.gg查询ID）
 match_mode,                       --匹配模式
 party_size,                       --组队人数（是单排，还是开黑）
@@ -75,7 +75,9 @@ player_name,                      --玩家名字
 player_suvive_time,               --玩家生存时间（秒）
 team_id,                          --组队ID
 team_placement,                   --组队位置（玩家列表位置）
-is_use_ride                       --是否使用载具(1使用，0未使用)
+is_use_ride,                      --是否使用载具(1使用，0未使用)
+is_win,                           --是否赢了比赛(1是，0否)
+is_team                           --是否组队(1是，0否)
 ```
 
 
@@ -112,20 +114,40 @@ victim_position_y                 --受害者位置Y坐标
 -->
 ```SQL
 name,                             --玩家姓名
-first_play_time,                  --玩家第一次游戏的时间
+first_play_time,                  --玩家第一次游戏的时间 格式：yyyy-mm-dd hh:MM:ss
 first_play_date,                  --分区字段，[first_play_time]格式：yyyy-mm-dd
-last_play_time,                   --玩家最近一次游戏的时间
+last_play_time,                   --玩家最近一次游戏的时间 格式：yyyy-mm-dd hh:MM:ss
 total_kills,                      --玩家总击杀数
+avg_kills,                        --玩家总击杀数
 total_assists,                    --玩家总助攻数
-total_death,                      --玩家总死亡数
+avg_assists,                      --玩家平均助攻数
 total_suvive_time,                --玩家总生成时间（秒）
+avg_suvive_time,                  --玩家平均生成时间（秒）
 total_dmg,                        --玩家总伤害值
+avg_dmg,                          --玩家平均伤害值
 play_count,                       --玩家游戏总场数
+win_count,                        --玩家赢的游戏总场数
+party_count,                      --玩家组队游戏总场数
 total_dbno,                       --玩家倒下但未阵亡总次数
 total_dist_ride,                  --玩家使用载具总距离
+max_dist_ride,                    --玩家使用载具最大距离
+max_dist_ride_match,              --玩家使用载具最大距离的比赛
 total_dist_walk,                  --玩家步行总距离
+max_dist_walk,                    --玩家步行最大距离
+max_dist_walk_match,              --玩家步行最大距离的比赛
 online_stages_start,              --习惯在线时段开始
 online_stages_end,                --习惯在线时段结束
+max_dist_shot,                    --最远击杀
+max_dist_shot_match,              --最远击杀比赛ID
+max_suvive_time,                  --最大生存时间
+max_suvive_time_match,            --最大生存时间比赛ID
+max_kills,                        --最大击杀次数
+max_kills_match,                  --最大击杀次数比赛ID
+max_assists,                      --最大助攻次数
+max_assists_match,                --最大助攻次数比赛ID
+count_use_ride,                   --载具使用次数
+kill_death_ratio,                 --KDA
+top_10_ratio                      --游戏 top10 占比
 ```
 
 ### gdm_match_stats_model：比赛统计模型表
@@ -134,10 +156,12 @@ online_stages_end,                --习惯在线时段结束
 -->
 ```SQL
 date,                             --比赛开始日期；分区字段，格式：yyyy-mm-dd
-time,                             --比赛开始时间；[date]处理字段，格式：hh-MM-ss
+time,                             --比赛开始时间；[date]处理字段，格式：hh:MM:ss
 match_time,                       --比赛进行时间（秒数）
 pubg_opgg_id,                     --pubg战绩pubg.op.gg查询ID
-match_size,                       --比赛玩家人数
+match_size,                       --团队总数
+party_size,                       --组队人数
+player_size,                      --统计玩家人数
 match_mode,                       --比赛模式
 max_kills,                        --最大击杀数（此局）
 max_kills_name,                   --最大击杀数 玩家名称（此局）
@@ -161,7 +185,7 @@ winner_list,                      --胜利玩家列表（使用;隔开）
 -->
 ```SQL
 date,                             --分区字段，格式：yyyy-mm-dd
-time,                             --[date]处理字段，格式：hh-MM-ss
+time,                             --[date]处理字段，格式：hh:MM:ss
 pubg_opgg_id,                     --pubg战绩pubg.op.gg查询ID
 match_mode,                       --比赛模式
 maximum_distance_shot,            --最远距离射击(cm)
@@ -173,6 +197,11 @@ player_dmg,                       --玩家伤害值（damage）
 player_kills,                     --玩家击杀数
 player_name,                      --玩家名字
 player_suvive_time,               --玩家生存时间（秒）
+is_party_team,                    --是否组队
+party_size,                       --组队人数
+is_winner,                        --是否胜利
+is_use_ride,                      --是否使用载具
+team_placement,                   --团队排名
 ```
 
 ### gdm_kill_match_stats_pageview：比赛击杀信息明细视图表
@@ -220,12 +249,14 @@ minute,                           --分钟（例如：30）
 
 ### gdm_wepons_model：武器模型
 <!-- 
-  定义武器模型（固定ID），基于（gdm_kill_match_stats_pageview）
+  统计武器数据，按地图分组
 -->
 ```SQL
 name,                             --武器名称
 avg_shot_distance,                --武器平均击杀距离
 max_shot_distance,                --武器最远击杀距离
+--武器出现场次
+--武器击杀次数
 map                               --武器出现地图
 ```
 
@@ -247,7 +278,7 @@ map                               --武器出现地图
 ```SQL
 id,                               --自定义ID字段
 date,                             --日期，格式：yyyy-mm-dd
-time,                             --时间，格式：hh-MM-ss
+time,                             --时间，格式：hh:MM:ss
 player_count,                     --玩家数量
 game_time,                        --游戏时间（秒）
 ```
@@ -326,7 +357,7 @@ user_count,                       --使用次数
 ```SQL
 id,                               --自定义ID字段
 date,                             --分区字段，格式：yyyy-mm-dd
-time,                             --[date]处理字段，格式：hh-MM-ss
+time,                             --[date]处理字段，格式：hh:MM:ss
 match_id,                         --匹配ID（adm_match_stats）
 match_mode,                       --比赛模式
 player_name,                      --玩家名字

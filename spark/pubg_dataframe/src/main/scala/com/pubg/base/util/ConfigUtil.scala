@@ -14,6 +14,9 @@ object ConfigUtil {
   val GDM_PLAYER_MATCH_STATS_PAGEVIEW = "gdm_player_match_stats_pageview"
   val GDM_KILL_MATCH_STATS_PAGEVIEW = "gdm_kill_match_stats_pageview"
   val GDM_MATCH_STATS_MODEL = "gdm_match_stats_model"
+  val GDM_PLAYER_CAREER_STATS_MODEL = "gdm_player_career_stats_model"
+
+
 
   val AGG_SOURCE_PATHS = "hdfs://node-0:9000/pubg_data/pubg-match-deaths/aggregate"
   val KILL_SOURCE_PATHS = "hdfs://node-0:9000/pubg_data/pubg-match-deaths/deaths"

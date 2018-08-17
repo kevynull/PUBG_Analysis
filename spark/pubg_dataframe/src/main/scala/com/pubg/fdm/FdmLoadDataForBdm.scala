@@ -30,6 +30,7 @@ object FdmLoadDataForBdm {
 
   /**
     * 比赛信息聚合统计宽表
+    *
     * @param spark
     * @return
     */
@@ -40,7 +41,8 @@ object FdmLoadDataForBdm {
     val agg = spark.table(sourceTableName)
 
     import spark.implicits._
-    val agg_ds = agg.as[BdmAggMatchStats]
+    val agg_ds = agg.where($"player_name".isNotNull).as[BdmAggMatchStats]
+    //有些数据为空
 
     val agg_wide = agg_ds.map(line => {
       val timestamp = DateUtils.getTime(line.date)
@@ -53,19 +55,27 @@ object FdmLoadDataForBdm {
       val minute = DateUtils.parseMinute(timestamp).toInt
       val seconds = DateUtils.parseSeconds(timestamp).toInt
       var isUseRide = 0
+      var isWin = 0
+      var isTeam = 0
       if (line.player_dist_ride > 0) {
         isUseRide = 1
+      }
+      if (line.team_placement == 1) {
+        isWin = 1
+      }
+      if (line.party_size > 1) {
+        isTeam = 1
       }
       FdmAggMatchWide(date, time, year, month, day, hour, minute, seconds, line.game_size, line.match_id,
         line.match_mode, line.party_size, line.player_assists, line.player_dbno, line.player_dist_ride,
         line.player_dist_walk, line.player_dmg, line.player_kills, line.player_name, line.player_survive_time,
-        line.team_id, line.team_placement, isUseRide
+        line.team_id, line.team_placement, isUseRide, isWin, isTeam
       )
     })
     agg_wide.write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
 
     val agg_group = agg_wide.select(agg_wide.col("date"), agg_wide.col("match_id"))
-      .groupBy("date","match_id").agg(count("match_id").as("match_count"))
+      .groupBy("date", "match_id").agg(count("match_id").as("match_count"))
     agg_group
   }
 
@@ -88,8 +98,8 @@ object FdmLoadDataForBdm {
     import spark.implicits._
     val kill_ds = kill.as[BdmKillMatchStats]
 
-    val agg_kill_join = kill_ds.join(agg_group, kill_ds.col("match_id") === agg_group.col("match_id"),"left")
-      .where(agg_group.col("match_id").isNotNull)
+    val agg_kill_join = kill_ds.join(agg_group, kill_ds.col("match_id") === agg_group.col("match_id"), "left")
+      .where(agg_group.col("match_id").isNotNull) // 有些数据为空
 
     val kill_join = agg_kill_join.select(
       agg_group.col("date"),

@@ -20,6 +20,8 @@ create table fdm_agg_match_wide(
     `player_suvive_time` DOUBLE,               --玩家生存时间（秒）
     `team_id` INT,                          --组队ID
     `team_placement` INT,                    --组队位置（玩家列表位置）
-    `is_use_ride` INT
+    `is_use_ride` INT,
+    `is_win` INT,                           --是否赢了比赛(1是，0否)
+    `is_team` INT                          --是否组队(1是，0否)
 )
 partitioned by (`date` STRING)                             --分区字段，格式：yyyy-mm-dd

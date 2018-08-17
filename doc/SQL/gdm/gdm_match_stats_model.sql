@@ -1,7 +1,10 @@
 create table gdm_match_stats_model(
 `time` STRING,                             
-`match_time` INT,                                                  
-`match_size` INT,                       
+`match_time` INT,    
+`pubg_opgg_id` STRING,                                
+`match_size` INT,      
+`party_size` INT,  
+`player_size` INT,               
 `match_mode` STRING,                      
 `max_kills` INT,  
 `max_kills_name` STRING,         

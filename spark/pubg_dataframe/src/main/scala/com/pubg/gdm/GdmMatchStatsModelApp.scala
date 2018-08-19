@@ -16,19 +16,18 @@ object GdmMatchStatsModelApp {
       .getOrCreate()
 
     val aggTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.FDM_AGG_MATCH_WIDE
-    val killPageViewTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_KILL_MATCH_STATS_PAGEVIEW
+    val killTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.FDM_KILL_MATCH_WIDE
     val targetTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MATCH_STATS_MODEL
 
     val aggWide = spark.table(aggTableName)
-    val killView = spark.table(killPageViewTableName)
+    val killWide = spark.table(killTableName)
 
     val maxKills = maxKillsDF(spark, aggWide)
     val maxAssists = maxAssistsDF(spark, aggWide)
     val maxDistRide = maxDistRideDF(spark, aggWide)
     val maxDistWalk = maxDistWalkDF(spark, aggWide)
     val maxDmg = maxDmgDF(spark, aggWide)
-    /* 此表统计 GDM_KILL_MATCH_STATS_PAGEVIEW */
-    val mdShot = mdShotDF(spark, killView)
+    val mdShot = mdShotDF(spark, killWide)
     val winnerList = winnerListDF(spark, aggWide)
     val matchTime = matchTimeDF(spark, aggWide)
 
@@ -71,11 +70,11 @@ object GdmMatchStatsModelApp {
       val list = line.getList[String](line.fieldIndex("winner_list"))
       var winner_list = ""
       try {
-        if (!Option(list).get.isEmpty){
+        if (!Option(list).get.isEmpty) {
           winner_list = list.toArray.mkString(";")
         }
       } catch {
-        case e:Exception => {
+        case e: Exception => {
           e.printStackTrace()
           println(list == None)
           println(list == Nil)
@@ -85,7 +84,7 @@ object GdmMatchStatsModelApp {
       }
 
 
-      GdmMatchStatsModel(date, time, pubg_opgg_id, match_time, match_size,party_size,player_size, match_mode, max_kills, max_kills_name,
+      GdmMatchStatsModel(date, time, pubg_opgg_id, match_time, match_size, party_size, player_size, match_mode, max_kills, max_kills_name,
         max_assists, max_assists_name, player_rides_size, max_dist_ride, max_dist_ride_name, max_dist_walk,
         max_dist_walk_name, max_dmg, max_dmg_name, maximum_distance_shot, md_shot_name, winner_list)
     }).write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
@@ -171,15 +170,19 @@ object GdmMatchStatsModelApp {
     * 分组取TopN，得到每局游戏，最远击杀的玩家
     *
     * @param spark
-    * @param killView
+    * @param killWide
     * @return
     */
-  def mdShotDF(spark: SparkSession, killView: DataFrame): DataFrame = {
+  def mdShotDF(spark: SparkSession, killWide: DataFrame): DataFrame = {
     import spark.implicits._
-    val w = Window.partitionBy($"pubg_opgg_id").orderBy($"shot_distance".desc)
-    val mdShot = killView.filter($"killer_name".isNotNull)
+    val w = Window.partitionBy($"match_id").orderBy($"shot_distance".desc)
+    val mdShot = killWide.filter($"killer_name".isNotNull)
       .withColumn("dr_rank", row_number().over(w)).where($"dr_rank" === 1)
-      .select($"pubg_opgg_id".as("pubg_opgg_id"), $"killer_name".as("md_shot_name"), $"shot_distance".as("maximum_distance_shot"))
+      .select(
+        $"match_id".as("pubg_opgg_id"),
+        $"killer_name".as("md_shot_name"),
+        $"shot_distance".as("maximum_distance_shot")
+      )
     mdShot
   }
 

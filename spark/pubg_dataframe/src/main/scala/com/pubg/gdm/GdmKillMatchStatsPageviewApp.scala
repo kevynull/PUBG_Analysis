@@ -41,8 +41,7 @@ object GdmKillMatchStatsPageviewApp {
       val victim_position_600_y = PositionUtils.coordinateScale(600, line.victim_position_y)
       val victim_position_800_x = PositionUtils.coordinateScale(800, line.victim_position_x)
       val victim_position_800_y = PositionUtils.coordinateScale(800, line.victim_position_y)
-      val shot_distance = PositionUtils.distance(line.killer_position_x, line.victim_position_x,
-        line.killer_position_y, line.victim_position_y)
+      val shot_distance = line.shot_distance
 
       GdmKillMatchStatsPageview(date, pubg_opgg_id, times, killed_by, killer_name, killer_placement,
         killer_position_x, killer_position_y, killer_position_600_x, killer_position_600_y,

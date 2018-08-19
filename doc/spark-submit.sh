@@ -19,14 +19,35 @@ spark-submit \
 --conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+# spark-submit \
+# --class com.pubg.fdm.FdmLoadDataForBdm \
+# --name FdmLoadDataForBdm \
+# --master yarn-cluster \
+# --executor-memory 2G \
+# --num-executors 1 \
+# --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+# --conf spark.io.compression.codec=lz4 \
+# /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
 spark-submit \
---class com.pubg.fdm.FdmLoadDataForBdm \
---name FdmLoadDataForBdm \
+--class com.pubg.fdm.FdmAggMatchWideApp \
+--name FdmAggMatchWideApp \
 --master yarn-cluster \
 --executor-memory 2G \
 --num-executors 1 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.fdm.FdmKillMatchWideApp \
+--name FdmKillMatchWideApp \
+--master yarn-cluster \
+--executor-memory 2G \
+--num-executors 1 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+--conf spark.yarn.executor.memoryOverhead=1024 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
 spark-submit \
@@ -85,3 +106,6 @@ spark-submit \
 
 # gdm_match_stats_model 中的数据与 fdm_agg_match_wide中的数据不符合，缺少了315条， 经过查明，fdm_agg_match_wide 中 有数据 ，player_name为空，在程序执行时过滤掉了。
 #select count(1) from fdm_agg_match_wide where match_id in (select distinct pubg_opgg_id from gdm_match_stats_model where length(winner_list) = 0) and team_placement = 1
+
+
+# select count(hour), hour , player_name from fdm_agg_match_wide where player_name is not null group by player_name,hour order by player_name asc ,count(hour) desc, hour desc limit 50;

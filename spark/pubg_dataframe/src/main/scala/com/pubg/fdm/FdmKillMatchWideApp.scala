@@ -1,7 +1,7 @@
 package com.pubg.fdm
 
 import com.pubg.base.{BdmKillMatchStats, FdmKillMatchWide}
-import com.pubg.base.util.ConfigUtil
+import com.pubg.base.util.{ConfigUtil, PositionUtils}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.sql.functions.count
 
@@ -28,7 +28,8 @@ object FdmKillMatchWideApp {
     val kill_ds = kill.as[BdmKillMatchStats]
 
     val agg_kill_join = kill_ds.join(aggGroup, kill_ds.col("match_id") === aggGroup.col("match_id"), "left")
-      .where(aggGroup.col("match_id").isNotNull) // 有些数据为空
+      .where(aggGroup.col("match_id").isNotNull)
+    // 有些数据为空，合并之后，有些比赛数据并没有明细击杀记录
 
     val kill_join = agg_kill_join.select(
       aggGroup.col("date"),
@@ -59,8 +60,10 @@ object FdmKillMatchWideApp {
       val victim_placement = line.getAs[Double]("victim_placement").toInt
       val victim_position_x = line.getAs[Double]("victim_position_x")
       val victim_position_y = line.getAs[Double]("victim_position_y")
+      val shot_distance = PositionUtils.distance(killer_position_x, victim_position_x,
+        killer_position_y, victim_position_y)
       FdmKillMatchWide(date, killed_by, killer_name, killer_placement, killer_position_x, killer_position_y,
-        map, match_id, times, victim_name, victim_placement, victim_position_x, victim_position_y)
+        map, match_id, times, victim_name, victim_placement, victim_position_x, victim_position_y,shot_distance)
     }).write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
   }
 }

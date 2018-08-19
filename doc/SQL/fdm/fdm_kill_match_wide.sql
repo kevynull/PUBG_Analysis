@@ -10,6 +10,7 @@ create table fdm_kill_match_wide(
     `victim_name` STRING,
     `victim_placement` INT,
     `victim_position_x` DOUBLE,
-    `victim_position_y` DOUBLE
+    `victim_position_y` DOUBLE,
+    `shot_distance` DOUBLE
 )
 partitioned by (`date` STRING)                             --分区字段，格式：yyyy-mm-dd

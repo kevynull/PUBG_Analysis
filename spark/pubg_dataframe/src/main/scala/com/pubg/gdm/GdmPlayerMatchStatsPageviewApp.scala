@@ -37,7 +37,7 @@ object GdmPlayerMatchStatsPageviewApp {
       .where(killWide.col("killer_name").isNotNull)
       .agg(sqrt(d).as("shot_distance"))*/
 
-    /* 这里的代码需要优化 start */
+    /* 这里的代码需要优化 start com.kv.demo.SqlColTest*/
     import spark.implicits._
     val tempKillWide = killWide.where(killWide.col("killer_name").isNotNull).as[FdmKillMatchWide].map(line => {
       val x1 = line.killer_position_x

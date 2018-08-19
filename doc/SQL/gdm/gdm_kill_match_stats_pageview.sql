@@ -19,6 +19,6 @@ create table gdm_kill_match_stats_pageview(
 `victim_position_600_y` DOUBLE,            --受害者位置Y坐标（比例缩放600）
 `victim_position_800_x` DOUBLE,            --受害者位置X坐标（比例缩放800）
 `victim_position_800_y` DOUBLE,            --受害者位置Y坐标（比例缩放800）
-`shot_distance` DOUBLE                    --射击距离（m）
+`shot_distance` DOUBLE                    --射击距离（cm）
 )
 partitioned by (`date` STRING)

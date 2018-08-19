@@ -20,8 +20,7 @@ create table gdm_player_career_stats_model (
     `total_dist_walk` DOUBLE,                  --玩家步行总距离
     `max_dist_walk` DOUBLE,
     `max_dist_walk_match` STRING,
-    `online_stages_start` INT,              --习惯在线时段开始
-    `online_stages_end` INT,                --习惯在线时段结束
+    `online_stages` INT,              --习惯在线时段
     `max_dist_shot` DOUBLE,
     `max_dist_shot_match` STRING,
     `max_suvive_time` DOUBLE,                   --最大生存时间

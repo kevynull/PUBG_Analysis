@@ -15,6 +15,7 @@ package com.pubg.base
   * @param victim_placement
   * @param victim_position_x
   * @param victim_position_y
+  * @param shot_distance
   */
 case class FdmKillMatchWide (
   date:String,
@@ -29,5 +30,6 @@ case class FdmKillMatchWide (
   victim_name:String,
   victim_placement:Int,
   victim_position_x:Double,
-  victim_position_y:Double
+  victim_position_y:Double,
+  shot_distance:Double
 )

@@ -97,7 +97,8 @@ times,                            --击杀时间（开局到击杀发生的秒�
 victim_name,                      --受害者名称
 victim_placement,                 --受害者位置（玩家列表位置）
 victim_position_x,                --受害者位置X坐标
-victim_position_y                 --受害者位置Y坐标
+victim_position_y,                --受害者位置Y坐标
+shot_distance,                    --射击距离（cm）
 ```
 
 <!-- 
@@ -135,8 +136,7 @@ max_dist_ride_match,              --玩家使用载具最大距离的比赛
 total_dist_walk,                  --玩家步行总距离
 max_dist_walk,                    --玩家步行最大距离
 max_dist_walk_match,              --玩家步行最大距离的比赛
-online_stages_start,              --习惯在线时段开始
-online_stages_end,                --习惯在线时段结束
+online_stages,                    --习惯在线时段
 max_dist_shot,                    --最远击杀
 max_dist_shot_match,              --最远击杀比赛ID
 max_suvive_time,                  --最大生存时间
@@ -230,7 +230,7 @@ victim_position_600_x,            --受害者位置X坐标（比例缩放600）
 victim_position_600_y,            --受害者位置Y坐标（比例缩放600）
 victim_position_800_x,            --受害者位置X坐标（比例缩放800）
 victim_position_800_y,            --受害者位置Y坐标（比例缩放800）
-shot_distance,                    --射击距离（m）
+shot_distance,                    --射击距离（cm）
 ```
 
 

@@ -25,8 +25,7 @@ package com.pubg.base
   * @param total_dist_walk
   * @param max_dist_walk
   * @param max_dist_walk_match
-  * @param online_stages_start
-  * @param online_stages_end
+  * @param online_stages
   * @param max_dist_shot
   * @param max_dist_shot_match
   * @param max_suvive_time
@@ -61,8 +60,7 @@ case class GdmPlayerCareerStatsModel (
   total_dist_walk: Double,
   max_dist_walk: Double,
   max_dist_walk_match: String,
-  online_stages_start: Int,
-  online_stages_end: Int,
+  online_stages: Int,
   max_dist_shot: Double,
   max_dist_shot_match: String,
   max_suvive_time: Double,

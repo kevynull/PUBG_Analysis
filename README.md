@@ -1,8 +1,8 @@
 # PUBG_数据分析
 
-![](note/image/UI.png)
+![游戏统计](note/image/game_stats.png)
 
-
+![热力图](note/image/hotmap.png)
 
 ## 数据源说明
 

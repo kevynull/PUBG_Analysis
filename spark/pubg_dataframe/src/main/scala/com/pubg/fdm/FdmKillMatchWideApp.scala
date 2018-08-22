@@ -1,9 +1,9 @@
 package com.pubg.fdm
 
-import com.pubg.base.{BdmKillMatchStats, FdmKillMatchWide}
 import com.pubg.base.util.{ConfigUtil, PositionUtils}
-import org.apache.spark.sql.{SaveMode, SparkSession}
+import com.pubg.base.{BdmKillMatchStats, FdmKillMatchWide}
 import org.apache.spark.sql.functions.count
+import org.apache.spark.sql.{SaveMode, SparkSession}
 
 /**
   * 比赛击杀信息明细宽表
@@ -21,10 +21,12 @@ object FdmKillMatchWideApp {
     val agg = spark.table(aggTableName)
     val kill = spark.table(killTableName)
 
-    val aggGroup = agg.select(agg.col("date"), agg.col("match_id"))
+    import spark.implicits._
+    val aggGroup = agg.where($"player_name".isNotNull) // player_name 为空，不统计
+      .select(agg.col("date"), agg.col("match_id"))
       .groupBy("date", "match_id").agg(count("match_id").as("match_count"))
 
-    import spark.implicits._
+
     val kill_ds = kill.as[BdmKillMatchStats]
 
     val agg_kill_join = kill_ds.join(aggGroup, kill_ds.col("match_id") === aggGroup.col("match_id"), "left")

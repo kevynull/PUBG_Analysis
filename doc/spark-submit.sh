@@ -1,23 +1,12 @@
-spark-submit \
---class com.kv.demo.SaveHiveTable \
---name SaveHiveTable \
---master yarn-cluster \
---executor-memory 1G \
---num-executors 1 \
---files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
---conf spark.io.compression.codec=lz4 \
-/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
-
-
-spark-submit \
---class com.pubg.bdm.BdmLoadDataForCSV \
---name BdmLoadDataForCSV \
---master yarn-cluster \
---executor-memory 2G \
---num-executors 1 \
---files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
---conf spark.io.compression.codec=lz4 \
-/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+# spark-submit \
+# --class com.kv.demo.SaveHiveTable \
+# --name SaveHiveTable \
+# --master yarn-cluster \
+# --executor-memory 1G \
+# --num-executors 1 \
+# --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+# --conf spark.io.compression.codec=lz4 \
+# /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
 # spark-submit \
 # --class com.pubg.fdm.FdmLoadDataForBdm \
@@ -29,47 +18,96 @@ spark-submit \
 # --conf spark.io.compression.codec=lz4 \
 # /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+##
+# 将csv中的内容导入到hive中
+# bdm_agg_match_stats
+##
+spark-submit \
+--class com.pubg.bdm.BdmAggMatchStatsApp \
+--name BdmAggMatchStatsApp \
+--master yarn-cluster \
+--executor-memory 3G \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar \
+hdfs://node001:9000/pubg_data/aggregate
+
+##
+# 将csv中的内容导入到hive中
+# bdm_kill_match_stats
+##
+spark-submit \
+--class com.pubg.bdm.BdmKillMatchStatsApp \
+--name BdmKillMatchStatsApp \
+--master yarn-cluster \
+--executor-memory 3G \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar \
+hdfs://node001:9000/pubg_data/deaths
+
+##
+# bdm层中的数据，扩宽清洗。存储到fdm层
+# fdm_agg_match_wide
+##
 spark-submit \
 --class com.pubg.fdm.FdmAggMatchWideApp \
 --name FdmAggMatchWideApp \
 --master yarn-cluster \
---executor-memory 2G \
---num-executors 1 \
+--executor-memory 3G \
+--num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+##
+# bdm层中的数据，扩宽清洗。存储到fdm层
+# fdm_kill_match_wide
+##
 spark-submit \
 --class com.pubg.fdm.FdmKillMatchWideApp \
 --name FdmKillMatchWideApp \
 --master yarn-cluster \
---executor-memory 2G \
---num-executors 1 \
+--executor-memory 3G \
+--num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
---conf spark.yarn.executor.memoryOverhead=1024 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+##
+# bdm层中的数据，聚合统计。存储到gdm层
+# gdm_player_match_stats_pageview
+##
 spark-submit \
 --class com.pubg.gdm.GdmPlayerMatchStatsPageviewApp \
 --name GdmPlayerMatchStatsPageviewApp \
 --master yarn-cluster \
---executor-memory 2G \
---num-executors 1 \
+--executor-memory 3G \
+--num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+##
+# bdm层中的数据，聚合统计。存储到gdm层
+# gdm_kill_match_stats_pageview
+##
 spark-submit \
 --class com.pubg.gdm.GdmKillMatchStatsPageviewApp \
 --name GdmKillMatchStatsPageviewApp \
 --master yarn-cluster \
---executor-memory 2G \
---num-executors 1 \
+--executor-memory 3G \
+--num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+##
+# bdm层中的数据，聚合统计。存储到gdm层
+# gdm_match_stats_model
+##
 spark-submit \
 --class com.pubg.gdm.GdmMatchStatsModelApp \
 --name GdmMatchStatsModelApp \
@@ -85,18 +123,17 @@ spark-submit \
 # 
 # ??--files /etc/hive/conf/hive-site.xml
 
-spark-submit \
---class com.kv.demo.SaveHiveTable \
---name SaveHiveTable \
---master spark://node-0:7077 \
---executor-memory 1G \
---num-executors 1 \
-/root/jars/pubg_dataframe-1.0-SNAPSHOT-jar-with-dependencies.jar
+# spark-submit \
+# --class com.kv.demo.SaveHiveTable \
+# --name SaveHiveTable \
+# --master spark://node-0:7077 \
+# --executor-memory 1G \
+# --num-executors 1 \
+# /root/jars/pubg_dataframe-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 
 # 备注：当使用spark on yarn 时， spark程序并没有hive-site.xml这个配置项，所以无法访问hive
 
---driver-java-options "-Dlog4j.configuration=/root/conf/log4j.properties"
 
 
 ########### 测试SQL

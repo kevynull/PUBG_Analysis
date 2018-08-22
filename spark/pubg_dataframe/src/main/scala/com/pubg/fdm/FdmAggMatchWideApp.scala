@@ -19,11 +19,8 @@ object FdmAggMatchWideApp {
     val agg = spark.table(sourceTableName)
 
     import spark.implicits._
-    val aggDS = agg.as[BdmAggMatchStats]
-      // .where($"player_name".isNotNull)
-    // 有些数据为空，这个版本先不判空，
-    // 由于前期数据清洗的地方过于繁杂，
-    // 如果添加此判断，后面的GDM层数据均需要重新统计
+    val aggDS = agg.where($"player_name".isNotNull).as[BdmAggMatchStats]  // player_name 为空，不统计
+
     aggDS.map(line => {
       val timestamp = DateUtils.getTime(line.date)
       val date = DateUtils.parseDate(timestamp)

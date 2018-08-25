@@ -39,16 +39,14 @@ object GdmPlayerMatchStatsPageviewApp {
 
     /* 这里的代码需要优化 start com.kv.demo.SqlColTest*/
     import spark.implicits._
-    val tempKillWide = killWide.where(killWide.col("killer_name").isNotNull).as[FdmKillMatchWide].map(line => {
-      val x1 = line.killer_position_x
-      val x2 = line.victim_position_x
-      val y1 = line.killer_position_y
-      val y2 = line.victim_position_y
-      val shot_dis = PositionUtils.distance(x1,x2,y1,y2)
-      TempGdmKillDistance(shot_dis,line.match_id,line.killer_name)
-    }).select("shot_distance","killer_name","match_id")
-
-    val killShotDis = tempKillWide.groupBy("killer_name","match_id").agg(max("shot_distance").as("shot_distance"))
+    val x1 = $"killer_position_x"
+    val x2 = $"victim_position_x"
+    val y1 = $"killer_position_y"
+    val y2 = $"victim_position_y"
+    val d = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)
+    val killShotDis = killWide.where($"killer_name".isNotNull)
+      .groupBy($"match_id", $"killer_name")
+      .agg(max(sqrt(d)).as("shot_distance"))
     /* end */
 
     val sql_on = killShotDis.col("match_id") === aggWide.col("match_id") && killShotDis.col("killer_name") === aggWide.col("player_name")

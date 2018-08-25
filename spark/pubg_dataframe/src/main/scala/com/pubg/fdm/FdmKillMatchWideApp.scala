@@ -1,7 +1,7 @@
 package com.pubg.fdm
 
-import com.pubg.base.util.{ConfigUtil, PositionUtils}
-import com.pubg.base.{BdmKillMatchStats, FdmKillMatchWide}
+import com.pubg.base.util.{ConfigUtil, DateUtils, PositionUtils}
+import com.pubg.base.{BdmAggMatchStats, BdmKillMatchStats, FdmKillMatchWide, TempBdmAggGroupDate}
 import org.apache.spark.sql.functions.count
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -22,19 +22,26 @@ object FdmKillMatchWideApp {
     val kill = spark.table(killTableName)
 
     import spark.implicits._
-    val aggGroup = agg.where($"player_name".isNotNull) // player_name 为空，不统计
-      .select(agg.col("date"), agg.col("match_id"))
-      .groupBy("date", "match_id").agg(count("match_id").as("match_count"))
-
+    /**
+      * 此处原先有个bug：读取的是bdm表，date数据为原始的yyyy-MM-dd hh:mm:ss 数据，导致
+      * 在saveAsTable时，partition 过多，造成 OOM 。
+      */
+    val dateMatch = agg.where($"player_name".isNotNull)
+      .as[BdmAggMatchStats].map(line => {
+      val timestamp = DateUtils.getTime(line.date)
+      val date = DateUtils.parseDate(timestamp)
+      val match_id = line.match_id
+      TempBdmAggGroupDate(date, match_id)
+    }).distinct()
 
     val kill_ds = kill.as[BdmKillMatchStats]
 
-    val agg_kill_join = kill_ds.join(aggGroup, kill_ds.col("match_id") === aggGroup.col("match_id"), "left")
-      .where(aggGroup.col("match_id").isNotNull)
+    val agg_kill_join = kill_ds.join(dateMatch, kill_ds.col("match_id") === dateMatch.col("match_id"), "left")
+      .where(dateMatch.col("match_id").isNotNull)
     // 有些数据为空，合并之后，有些比赛数据并没有明细击杀记录
 
     val kill_join = agg_kill_join.select(
-      aggGroup.col("date"),
+      dateMatch.col("date"),
       kill_ds.col("killed_by"),
       kill_ds.col("killer_name"),
       kill_ds.col("killer_placement"),
@@ -65,7 +72,7 @@ object FdmKillMatchWideApp {
       val shot_distance = PositionUtils.distance(killer_position_x, victim_position_x,
         killer_position_y, victim_position_y)
       FdmKillMatchWide(date, killed_by, killer_name, killer_placement, killer_position_x, killer_position_y,
-        map, match_id, times, victim_name, victim_placement, victim_position_x, victim_position_y,shot_distance)
+        map, match_id, times, victim_name, victim_placement, victim_position_x, victim_position_y, shot_distance)
     }).write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
   }
 }

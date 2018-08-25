@@ -48,6 +48,6 @@ object FdmAggMatchWideApp {
         line.player_dist_walk, line.player_dmg, line.player_kills, line.player_name, line.player_survive_time,
         line.team_id, line.team_placement, isUseRide, isWin, isTeam
       )
-    }).write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
+    }).coalesce(1).write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
   }
 }

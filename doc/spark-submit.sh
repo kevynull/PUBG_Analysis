@@ -25,8 +25,9 @@
 spark-submit \
 --class com.pubg.bdm.BdmAggMatchStatsApp \
 --name BdmAggMatchStatsApp \
---master yarn-cluster \
---executor-memory 3G \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 2G \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
@@ -40,8 +41,9 @@ hdfs://node001:9000/pubg_data/aggregate
 spark-submit \
 --class com.pubg.bdm.BdmKillMatchStatsApp \
 --name BdmKillMatchStatsApp \
---master yarn-cluster \
---executor-memory 3G \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 2G \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
@@ -55,8 +57,9 @@ hdfs://node001:9000/pubg_data/deaths
 spark-submit \
 --class com.pubg.fdm.FdmAggMatchWideApp \
 --name FdmAggMatchWideApp \
---master yarn-cluster \
---executor-memory 3G \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 2G \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
@@ -69,12 +72,15 @@ spark-submit \
 spark-submit \
 --class com.pubg.fdm.FdmKillMatchWideApp \
 --name FdmKillMatchWideApp \
---master yarn-cluster \
---executor-memory 3G \
---num-executors 2 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 2G \
+--num-executors 1 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
---conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+# --driver-memory 2g \
+# --conf spark.io.compression.codec=lz4 \
 
 ##
 # bdm层中的数据，聚合统计。存储到gdm层
@@ -83,8 +89,9 @@ spark-submit \
 spark-submit \
 --class com.pubg.gdm.GdmPlayerMatchStatsPageviewApp \
 --name GdmPlayerMatchStatsPageviewApp \
---master yarn-cluster \
---executor-memory 3G \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 2G \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
@@ -98,7 +105,7 @@ spark-submit \
 --class com.pubg.gdm.GdmKillMatchStatsPageviewApp \
 --name GdmKillMatchStatsPageviewApp \
 --master yarn-cluster \
---executor-memory 3G \
+--executor-memory 2G \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
@@ -111,7 +118,8 @@ spark-submit \
 spark-submit \
 --class com.pubg.gdm.GdmMatchStatsModelApp \
 --name GdmMatchStatsModelApp \
---master yarn-cluster \
+--master yarn \
+--deploy-mode cluster \
 --executor-memory 2G \
 --num-executors 1 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
@@ -146,3 +154,44 @@ spark-submit \
 
 
 # select count(hour), hour , player_name from fdm_agg_match_wide where player_name is not null group by player_name,hour order by player_name asc ,count(hour) desc, hour desc limit 50;
+
+
+./spark-submit \
+--class com.xyz.MySpark \
+--conf "spark.executor.extraJavaOptions=-XX:MaxPermSize=512M" \
+--driver-java-options -XX:MaxPermSize=512m \
+--driver-memory 3g \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 2G \
+--executor-cores 8 \
+--num-executors 12  \
+/home/myuser/myspark-1.0.jar
+
+
+./spark-submit --class com.xyz.MySpark \
+--conf "spark.executor.extraJavaOptions=-XX:MaxPermSize=1024M" \
+--driver-java-options -XX:MaxPermSize=1024m \
+--driver-memory 4g \
+--master yarn-client \
+--executor-memory 2G \
+--executor-cores 8 \
+--num-executors 15  \
+/home/myuser/myspark-1.0.jar
+
+
+#!/bin/bash  
+source /etc/profile  
+  
+nohup /opt/modules/spark/bin/spark-submit \
+--master spark://10.130.2.20:7077 \
+--conf "spark.executor.extraJavaOptions=-XX:PermSize=8m -XX:SurvivorRatio=4 -XX:NewRatio=4 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps" \
+--driver-memory 1g \
+--executor-memory 1g \
+--total-executor-cores 48 \
+--conf "spark.ui.port=8088"  \
+--jars /opt/bin/sparkJars/kafka_2.10-0.8.2.1.jar,/opt/bin/sparkJars/spark-streaming-kafka_2.10-1.4.1.jar,/opt/bin/sparkJars/metrics-core-2.2.0.jar,/opt/bin/sparkJars  
+/mysql-connector-java-5.1.26-bin.jar,/opt/bin/sparkJars/spark-streaming-kafka_2.10-1.4.1.jar \
+--class com.spark.streaming.Top3HotProduct \
+SparkApp.jar \
+

@@ -74,8 +74,11 @@ spark-submit \
 --name FdmKillMatchWideApp \
 --master yarn \
 --deploy-mode cluster \
---executor-memory 2G \
---num-executors 1 \
+--executor-memory 4G \
+--driver-memory 4G \
+--conf spark.yarn.executor.memoryOverhead=2048 \
+--conf spark.yarn.driver.memoryOverhead=2048 \
+--num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 

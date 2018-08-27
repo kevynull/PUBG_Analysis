@@ -29,7 +29,7 @@ case class GdmMatchStatsModel (
   date:String,
   time: String,
   pubg_opgg_id: String,
-  match_time: Int,
+  match_time: Double,
   match_size: Int,
   party_size: Int,
   player_size: Int,

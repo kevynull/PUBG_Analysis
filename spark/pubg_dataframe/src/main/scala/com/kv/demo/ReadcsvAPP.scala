@@ -1,5 +1,6 @@
 package com.kv.demo
 
+import org.apache.spark.sql.functions.concat_ws
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
 object ReadcsvAPP {
@@ -20,8 +21,8 @@ object ReadcsvAPP {
 
     val ds = people.as[AggMatchStats]
     //ds.write.mode()
-    ds.map(line => line).show
-
+    //ds.map(line => line).show
+    ds.select(concat_ws(" ", $"party_size", $"game_size").as("test")).show()
     spark.stop()
 
   }

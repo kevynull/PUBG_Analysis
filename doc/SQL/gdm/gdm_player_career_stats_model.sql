@@ -6,7 +6,7 @@ create table gdm_player_career_stats_model (
     `avg_kills` DOUBLE,                   --玩家总击杀数
     `total_assists` INT,                    --玩家总助攻数
     `avg_assists` DOUBLE,
-    `total_suvive_time` INT,                --玩家总生存时间（秒）
+    `total_suvive_time` DOUBLE,                --玩家总生存时间（秒）
     `avg_suvive_time` DOUBLE,  
     `total_dmg` INT,                        --玩家总伤害值
     `avg_dmg` DOUBLE,

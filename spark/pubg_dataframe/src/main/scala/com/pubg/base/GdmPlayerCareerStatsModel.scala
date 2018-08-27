@@ -46,7 +46,7 @@ case class GdmPlayerCareerStatsModel (
   avg_kills: Double,
   total_assists: Int,
   avg_assists: Double,
-  total_suvive_time: Int,
+  total_suvive_time: Double,
   avg_suvive_time: Double,
   total_dmg: Int,
   avg_dmg: Double,
@@ -70,5 +70,6 @@ case class GdmPlayerCareerStatsModel (
   max_assists: Int,
   max_assists_match: String,
   count_use_ride: Int,
-  kill_death_ratio: Double
+  kill_death_ratio: Double,
+  top_10_ratio: Double
 )

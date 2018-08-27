@@ -1,6 +1,6 @@
 create table gdm_match_stats_model(
 `time` STRING,                             
-`match_time` INT,    
+`match_time` DOUBLE,    
 `pubg_opgg_id` STRING,                                
 `match_size` INT,      
 `party_size` INT,  

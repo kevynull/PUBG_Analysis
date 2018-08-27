@@ -1,7 +1,7 @@
 package com.pubg.gdm
 
-import com.pubg.base.util.{ConfigUtil, PositionUtils}
-import com.pubg.base.{FdmKillMatchWide, TempGdmKillDistance, GdmPlayerMatchStatsPageview}
+import com.pubg.base.GdmPlayerMatchStatsPageview
+import com.pubg.base.util.ConfigUtil
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -70,12 +70,12 @@ object GdmPlayerMatchStatsPageviewApp {
       val match_mode = line.getAs[String]("match_mode")
       val party_size = line.getAs[Int]("party_size")
       var is_party_team = 0
-      if (party_size > 1){
+      if (party_size > 1) {
         is_party_team = 1
       }
       val team_placement = line.getAs[Int]("team_placement")
       var is_winner = 0
-      if (team_placement == 1){
+      if (team_placement == 1) {
         is_winner = 1
       }
       val maximum_shot_distance = line.getAs[Double]("shot_distance")
@@ -91,7 +91,7 @@ object GdmPlayerMatchStatsPageviewApp {
 
       GdmPlayerMatchStatsPageview(date, time, pubg_opgg_id, match_mode, maximum_shot_distance, player_assists,
         player_dbno, player_dist_ride, player_dist_walk, player_dmg, player_kills, player_name, player_suvive_time,
-        is_party_team,party_size,is_winner,is_use_ride,team_placement)
+        is_party_team, party_size, is_winner, is_use_ride, team_placement)
     }).write.mode(SaveMode.Overwrite).partitionBy(ConfigUtil.PARTITION).saveAsTable(targetTableName)
 
   }

@@ -23,8 +23,8 @@ object BdmKillMatchStatsApp {
 
     val tableName = ConfigUtil.DB_NAME + "." + ConfigUtil.BDM_KILL_MATCH_STATS
 
-    val agg = spark.read.option("header", "true").option("inferSchema", "true").csv(inputPath)
-    agg.as[BdmKillMatchStats].coalesce(1).write.mode(SaveMode.Overwrite).saveAsTable(tableName)
+    val kill = spark.read.option("header", "true").option("inferSchema", "true").csv(inputPath)
+    kill.as[BdmKillMatchStats].coalesce(1).write.mode(SaveMode.Overwrite).saveAsTable(tableName)
   }
 
 }

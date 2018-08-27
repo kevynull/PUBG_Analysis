@@ -48,7 +48,7 @@ object GdmMatchStatsModelApp {
     gdmMatchStats.map(line => {
       val date = line.getAs[String]("date")
       val time = line.getAs[String]("time")
-      val match_time = line.getAs[Double]("match_time").toInt
+      val match_time = line.getAs[Double]("match_time")
       val pubg_opgg_id = line.getAs[String]("match_id")
       val match_size = line.getAs[Int]("game_size")
       val party_size = line.getAs[Int]("party_size")

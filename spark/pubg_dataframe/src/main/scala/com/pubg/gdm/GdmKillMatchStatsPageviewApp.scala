@@ -1,7 +1,7 @@
 package com.pubg.gdm
 
-import com.pubg.base.{FdmKillMatchWide, GdmKillMatchStatsPageview}
 import com.pubg.base.util.{ConfigUtil, PositionUtils}
+import com.pubg.base.{FdmKillMatchWide, GdmKillMatchStatsPageview}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
 /**

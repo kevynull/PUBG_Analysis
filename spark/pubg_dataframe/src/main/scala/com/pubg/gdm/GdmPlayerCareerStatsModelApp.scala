@@ -1,10 +1,10 @@
 package com.pubg.gdm
 
+import com.pubg.base.{GdmPlayerCareerStatsModel, TempGdmPlayerStats}
 import com.pubg.base.util.ConfigUtil
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.row_number
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.functions.{row_number, _}
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 
 /**
   *
@@ -23,8 +23,8 @@ object GdmPlayerCareerStatsModelApp {
     val PARTITION_BY = "first_play_date"
 
     /* 必须判断 player_name is not null */
-    import spark.implicits._
-    val aggWide = spark.table(aggTableName).where($"player_name".isNotNull)
+
+    val aggWide = spark.table(aggTableName)
     val killWide = spark.table(killTableName)
 
     val firstPlayTime = firstPlayTimeDF(spark, aggWide)
@@ -37,8 +37,8 @@ object GdmPlayerCareerStatsModelApp {
     val top10Ratio = top10RatioDF(spark, aggWide)
     val maxDistRide = maxDistRideDF(spark, aggWide)
     val maxDistWalk = maxDistWalkDF(spark, aggWide)
-
     /* 玩家聚合统计 */
+    import spark.implicits._
     val playerStats = aggWide.groupBy("player_name")
       .agg(
         sum("player_kills").as("total_kills"),
@@ -49,16 +49,96 @@ object GdmPlayerCareerStatsModelApp {
         avg("player_suvive_time").as("avg_suvive_time"),
         sum("player_dmg").as("total_dmg"),
         avg("player_dmg").as("avg_dmg"),
-        count("player_name").as("player_count"),
+        count("player_name").as("play_count"),
         sum("is_win").as("win_count"),
         sum("is_team").as("party_count"),
         sum("player_dbno").as("total_dbno"),
         sum("player_dist_ride").as("total_dist_ride"),
-        sum("player_dist_walk").as("avg_dist_walk"),
-        sum("is_use_ride").as("count_use_ride"),
-        avg(sum("player_kills") + (sum("player_assists") * 0.3)).as("kill_death_ratio")
-      )
+        sum("player_dist_walk").as("total_dist_walk"),
+        sum("is_use_ride").as("count_use_ride")
+      ).map(line => {
+      val player_name = line.getAs[String]("player_name")
+      val total_kills = line.getAs[Long]("total_kills").toInt
+      val avg_kills = line.getAs[Double]("avg_kills")
+      val total_assists = line.getAs[Long]("total_assists").toInt
+      val avg_assists = line.getAs[Double]("avg_assists")
+      val total_suvive_time = line.getAs[Double]("total_suvive_time")
+      val avg_suvive_time = line.getAs[Double]("avg_suvive_time")
+      val total_dmg = line.getAs[Long]("total_dmg").toInt
+      val avg_dmg = line.getAs[Double]("avg_dmg")
+      val play_count = line.getAs[Long]("play_count").toInt
+      val win_count = line.getAs[Long]("win_count").toInt
+      val party_count = line.getAs[Long]("party_count").toInt
+      val total_dbno = line.getAs[Long]("total_dbno").toInt
+      val total_dist_ride = line.getAs[Double]("total_dist_ride")
+      val total_dist_walk = line.getAs[Double]("total_dist_walk")
+      val count_use_ride = line.getAs[Long]("count_use_ride").toInt
+      val kill_death_ratio = (total_kills + (total_assists * 0.3)) / play_count  // 计算KDA
 
+      TempGdmPlayerStats(player_name, total_kills, avg_kills, total_assists, avg_assists, total_suvive_time, avg_suvive_time,
+        total_dmg, avg_dmg, play_count, win_count, party_count, total_dbno, total_dist_ride, total_dist_walk,
+        count_use_ride, kill_death_ratio)
+    })
+    val gdmPlayerCareerStats = playerStats
+      .join(firstPlayTime, firstPlayTime.col("player") === playerStats.col("player_name"), "left")
+      .join(lastPlayTime, lastPlayTime.col("player") === playerStats.col("player_name"), "left")
+      .join(onlineStages, onlineStages.col("player") === playerStats.col("player_name"), "left")
+      .join(maxDistShot, maxDistShot.col("player") === playerStats.col("player_name"), "left")
+      .join(maxSuviveTime, maxSuviveTime.col("player") === playerStats.col("player_name"), "left")
+      .join(maxKills, maxKills.col("player") === playerStats.col("player_name"), "left")
+      .join(maxAssists, maxAssists.col("player") === playerStats.col("player_name"), "left")
+      .join(top10Ratio, top10Ratio.col("player") === playerStats.col("player_name"), "left")
+      .join(maxDistRide, maxDistRide.col("player") === playerStats.col("player_name"), "left")
+      .join(maxDistWalk, maxDistWalk.col("player") === playerStats.col("player_name"), "left")
+
+    gdmPlayerCareerStats.map(line => {
+      val name = line.getAs[String]("player_name")
+      val first_play_time = line.getAs[String]("first_play_time")
+      val first_play_date = line.getAs[String]("first_play_date")
+      val last_play_time = line.getAs[String]("last_play_time")
+      val total_kills = line.getAs[Int]("total_kills")
+      val avg_kills = line.getAs[Double]("avg_kills")
+      val total_assists = line.getAs[Int]("total_assists")
+      val avg_assists = line.getAs[Double]("avg_assists")
+      val total_suvive_time = line.getAs[Double]("total_suvive_time")
+      val avg_suvive_time = line.getAs[Double]("avg_suvive_time")
+      val total_dmg = line.getAs[Int]("total_dmg")
+      val avg_dmg = line.getAs[Double]("avg_dmg")
+      val play_count = line.getAs[Int]("play_count")
+      val win_count = line.getAs[Int]("win_count")
+      val party_count = line.getAs[Int]("party_count")
+      val total_dbno = line.getAs[Int]("total_dbno")
+      val total_dist_ride = line.getAs[Double]("total_dist_ride")
+      val max_dist_ride = line.getAs[Double]("max_dist_ride")
+      val max_dist_ride_match = line.getAs[String]("max_dist_ride_match")
+      val total_dist_walk = line.getAs[Double]("total_dist_walk")
+      val max_dist_walk = line.getAs[Double]("max_dist_walk")
+      val max_dist_walk_match = line.getAs[String]("max_dist_walk_match")
+      val online_stages = line.getAs[Int]("online_stages")
+      val max_dist_shot = line.getAs[Double]("max_dist_shot")
+      val max_dist_shot_match = line.getAs[String]("max_dist_shot_match")
+      val max_suvive_time = line.getAs[Double]("max_suvive_time")
+      val max_suvive_time_match = line.getAs[String]("max_suvive_time_match")
+      val max_kills = line.getAs[Int]("max_kills")
+      val max_kills_match = line.getAs[String]("max_kills_match")
+      val max_assists = line.getAs[Int]("max_assists")
+      val max_assists_match = line.getAs[String]("max_assists_match")
+      val count_use_ride = line.getAs[Int]("count_use_ride")
+      val kill_death_ratio = line.getAs[Double]("kill_death_ratio")
+      val top_10_count = line.getAs[Long]("top_10_count")
+      val top_10_ratio = if (play_count > 0) {
+        top_10_count / play_count
+      } else {
+        top_10_count / 1
+      }
+
+      GdmPlayerCareerStatsModel(name, first_play_time, first_play_date, last_play_time, total_kills, avg_kills,
+        total_assists, avg_assists, total_suvive_time, avg_suvive_time, total_dmg, avg_dmg,
+        play_count, win_count, party_count, total_dbno, total_dist_ride, max_dist_ride, max_dist_ride_match,
+        total_dist_walk, max_dist_walk, max_dist_walk_match, online_stages, max_dist_shot, max_dist_shot_match,
+        max_suvive_time, max_suvive_time_match, max_kills, max_kills_match, max_assists, max_assists_match,
+        count_use_ride, kill_death_ratio, top_10_ratio)
+    }).write.mode(SaveMode.Overwrite).partitionBy(PARTITION_BY).saveAsTable(targetTableName)
   }
 
   /**
@@ -75,7 +155,7 @@ object GdmPlayerCareerStatsModelApp {
       .select(
         $"player_name".as("player"),
         $"date".as("first_play_date"),
-        concat($"date", $" ", $"time").as("first_play_time")
+        concat_ws(" ", $"date", $"time").as("first_play_time")
       )
   }
 
@@ -92,7 +172,7 @@ object GdmPlayerCareerStatsModelApp {
     aggWide.withColumn("date_rank", row_number().over(w)).where($"date_rank" === 1)
       .select(
         $"player_name".as("player"),
-        concat($"date", $" ", $"time").as("last_play_time")
+        concat_ws(" ", $"date", $"time").as("last_play_time")
       )
   }
 
@@ -105,8 +185,12 @@ object GdmPlayerCareerStatsModelApp {
     */
   def onlineStagesDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
-    val w = Window.partitionBy($"player_name").orderBy(count($"hour").desc, $"hour".desc)
-    aggWide.withColumn("hour_rank", row_number().over(w)).where($"hour_rank" === 1)
+
+    val aggWideGroup = aggWide.groupBy($"player_name", $"hour")
+      .agg(count($"hour").as("hour_count"))
+
+    val w = Window.partitionBy($"player_name").orderBy($"hour_count".desc, $"hour".desc)
+    aggWideGroup.withColumn("hour_rank", row_number().over(w)).where($"hour_rank" === 1)
       .select(
         $"player_name".as("player"),
         $"hour".as("online_stages")
@@ -235,4 +319,5 @@ object GdmPlayerCareerStatsModelApp {
         $"player_dist_walk".as("max_dist_walk")
       )
   }
+
 }

@@ -150,11 +150,12 @@ spark-submit \
 --deploy-mode cluster \
 --executor-memory 4G \
 --driver-memory 4G \
---conf spark.yarn.executor.memoryOverhead=2048 \
---conf spark.yarn.driver.memoryOverhead=2048 \
+--conf spark.yarn.executor.memoryOverhead=1024 \
+--conf spark.yarn.driver.memoryOverhead=1024 \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
 --conf spark.io.compression.codec=lz4 \
+--conf spark.sql.shuffle.partitions=3000 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
 

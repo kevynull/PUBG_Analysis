@@ -34,7 +34,7 @@ object GdmPlayerCareerStatsModelApp {
     val maxSuviveTime = maxSuviveTimeDF(spark, aggWide)
     val maxKills = maxKillsDF(spark, aggWide)
     val maxAssists = maxAssistsDF(spark, aggWide)
-    val top10Ratio = top10RatioDF(spark, aggWide)
+    val top10Count = top10CountDF(spark, aggWide)
     val maxDistRide = maxDistRideDF(spark, aggWide)
     val maxDistWalk = maxDistWalkDF(spark, aggWide)
     /* 玩家聚合统计 */
@@ -87,7 +87,7 @@ object GdmPlayerCareerStatsModelApp {
       .join(maxSuviveTime, maxSuviveTime.col("player") === playerStats.col("player_name"), "left")
       .join(maxKills, maxKills.col("player") === playerStats.col("player_name"), "left")
       .join(maxAssists, maxAssists.col("player") === playerStats.col("player_name"), "left")
-      .join(top10Ratio, top10Ratio.col("player") === playerStats.col("player_name"), "left")
+      .join(top10Count, top10Count.col("player") === playerStats.col("player_name"), "left")
       .join(maxDistRide, maxDistRide.col("player") === playerStats.col("player_name"), "left")
       .join(maxDistWalk, maxDistWalk.col("player") === playerStats.col("player_name"), "left")
 
@@ -151,12 +151,13 @@ object GdmPlayerCareerStatsModelApp {
   def firstPlayTimeDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"player_name").orderBy(unix_timestamp($"date").asc, unix_timestamp($"time").asc)
-    aggWide.withColumn("date_rank", row_number().over(w)).where($"date_rank" === 1)
+    val firstPlayTime = aggWide.withColumn("date_rank", row_number().over(w)).where($"date_rank" === 1)
       .select(
         $"player_name".as("player"),
         $"date".as("first_play_date"),
         concat_ws(" ", $"date", $"time").as("first_play_time")
       )
+    firstPlayTime
   }
 
   /**
@@ -169,11 +170,12 @@ object GdmPlayerCareerStatsModelApp {
   def lastPlayTimeDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"player_name").orderBy(unix_timestamp($"date").desc, unix_timestamp($"time").desc)
-    aggWide.withColumn("date_rank", row_number().over(w)).where($"date_rank" === 1)
+    val lastPlayTime = aggWide.withColumn("date_rank", row_number().over(w)).where($"date_rank" === 1)
       .select(
         $"player_name".as("player"),
         concat_ws(" ", $"date", $"time").as("last_play_time")
       )
+    lastPlayTime
   }
 
   /**
@@ -190,11 +192,12 @@ object GdmPlayerCareerStatsModelApp {
       .agg(count($"hour").as("hour_count"))
 
     val w = Window.partitionBy($"player_name").orderBy($"hour_count".desc, $"hour".desc)
-    aggWideGroup.withColumn("hour_rank", row_number().over(w)).where($"hour_rank" === 1)
+    val onlineStages = aggWideGroup.withColumn("hour_rank", row_number().over(w)).where($"hour_rank" === 1)
       .select(
         $"player_name".as("player"),
         $"hour".as("online_stages")
       )
+    onlineStages
   }
 
   /**
@@ -207,13 +210,14 @@ object GdmPlayerCareerStatsModelApp {
   def maxDistShotDF(spark: SparkSession, killWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"killer_name").orderBy($"shot_distance".desc)
-    killWide.filter($"killer_name".isNotNull)
+    val maxDistShot = killWide.filter($"killer_name".isNotNull)
       .withColumn("kl_rank", row_number().over(w)).where($"kl_rank" === 1)
       .select(
         $"match_id".as("max_dist_shot_match"),
         $"killer_name".as("player"),
         $"shot_distance".as("max_dist_shot")
       )
+    maxDistShot
   }
 
   /**
@@ -226,12 +230,13 @@ object GdmPlayerCareerStatsModelApp {
   def maxSuviveTimeDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"player_name").orderBy($"player_suvive_time".desc)
-    aggWide.withColumn("st_rank", row_number().over(w)).where($"st_rank" === 1)
+    val maxSuviveTime = aggWide.withColumn("st_rank", row_number().over(w)).where($"st_rank" === 1)
       .select(
         $"match_id".as("max_suvive_time_match"),
         $"player_name".as("player"),
         $"player_suvive_time".as("max_suvive_time")
       )
+    maxSuviveTime
   }
 
   /**
@@ -244,12 +249,13 @@ object GdmPlayerCareerStatsModelApp {
   def maxKillsDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"player_name").orderBy($"player_kills".desc)
-    aggWide.withColumn("pk_rank", row_number().over(w)).where($"pk_rank" === 1)
+    val maxKills = aggWide.withColumn("pk_rank", row_number().over(w)).where($"pk_rank" === 1)
       .select(
         $"match_id".as("max_kills_match"),
         $"player_name".as("player"),
         $"player_kills".as("max_kills")
       )
+    maxKills
   }
 
   /**
@@ -262,26 +268,28 @@ object GdmPlayerCareerStatsModelApp {
   def maxAssistsDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"player_name").orderBy($"player_assists".desc)
-    aggWide.withColumn("pa_rank", row_number().over(w)).where($"pa_rank" === 1)
+    val maxAssists = aggWide.withColumn("pa_rank", row_number().over(w)).where($"pa_rank" === 1)
       .select(
         $"match_id".as("max_assists_match"),
         $"player_name".as("player"),
         $"player_assists".as("max_assists")
       )
+    maxAssists
   }
 
   /**
-    * 玩家TOP10 概率统计
+    * 玩家TOP10 数字统计
     *
     * @param spark
     * @param aggWide
     * @return
     */
-  def top10RatioDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
+  def top10CountDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
-    aggWide.where($"team_placement" <= 10).groupBy($"player_name")
+    val top10Count = aggWide.where($"team_placement" <= 10).groupBy($"player_name")
       .agg(count("player_name").as("top_10_count"))
       .select($"player_name".as("player"), $"top_10_count")
+    top10Count
   }
 
   /**
@@ -294,12 +302,13 @@ object GdmPlayerCareerStatsModelApp {
   def maxDistRideDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"player_name").orderBy($"player_dist_ride".desc)
-    aggWide.withColumn("pdr_rank", row_number().over(w)).where($"pdr_rank" === 1)
+    val maxDistRide = aggWide.withColumn("pdr_rank", row_number().over(w)).where($"pdr_rank" === 1)
       .select(
         $"match_id".as("max_dist_ride_match"),
         $"player_name".as("player"),
         $"player_dist_ride".as("max_dist_ride")
       )
+    maxDistRide
   }
 
   /**
@@ -312,12 +321,13 @@ object GdmPlayerCareerStatsModelApp {
   def maxDistWalkDF(spark: SparkSession, aggWide: DataFrame): DataFrame = {
     import spark.implicits._
     val w = Window.partitionBy($"player_name").orderBy($"player_dist_walk".desc)
-    aggWide.withColumn("pdw_rank", row_number().over(w)).where($"pdw_rank" === 1)
+    val maxDistWalk = aggWide.withColumn("pdw_rank", row_number().over(w)).where($"pdw_rank" === 1)
       .select(
         $"match_id".as("max_dist_walk_match"),
         $"player_name".as("player"),
         $"player_dist_walk".as("max_dist_walk")
       )
+    maxDistWalk
   }
 
 }

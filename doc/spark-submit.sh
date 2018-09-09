@@ -86,6 +86,40 @@ spark-submit \
 # --conf spark.io.compression.codec=lz4 \
 
 ##
+# 分离player的计算方法
+##
+spark-submit \
+--class com.pubg.gdm.BeforeGdmPlayerStats \
+--name BeforeGdmPlayerStats \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+##
+# 分离player的计算方法
+##
+spark-submit \
+--class com.pubg.gdm.BeforeGdmPlayerMaxStats \
+--name BeforeGdmPlayerMaxStats \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+##
 # bdm层中的数据，聚合统计。存储到gdm层
 # gdm_player_match_stats_pageview
 ##
@@ -148,14 +182,14 @@ spark-submit \
 --name GdmPlayerCareerStatsModelApp \
 --master yarn \
 --deploy-mode cluster \
---executor-memory 4G \
---driver-memory 4G \
+--executor-memory 6G \
+--driver-memory 6G \
 --conf spark.yarn.executor.memoryOverhead=1024 \
 --conf spark.yarn.driver.memoryOverhead=1024 \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.sql.shuffle.partitions=2000 \
 --conf spark.io.compression.codec=lz4 \
---conf spark.sql.shuffle.partitions=3000 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
 

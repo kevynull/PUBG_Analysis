@@ -3,8 +3,8 @@ package com.pubg.gdm
 import com.pubg.base.util.ConfigUtil
 import com.pubg.base._
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{row_number, _}
-import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 /**
   * 
@@ -80,7 +80,7 @@ object BeforeGdmPlayerMaxStats {
       val first_play_time = line.getAs[String]("first_play_time")
 
       TempGdmFirstPlayTime(player, first_play_date, first_play_time)
-    })
+    }).toDF()
   }
 
   /**
@@ -103,7 +103,7 @@ object BeforeGdmPlayerMaxStats {
       val last_play_time = line.getAs[String]("last_play_time")
 
       TempGdmLastPlayTime(player, last_play_time)
-    })
+    }).toDF()
   }
 
   /**
@@ -130,7 +130,7 @@ object BeforeGdmPlayerMaxStats {
       val online_stages = line.getAs[Int]("online_stages")
 
       TempGdmOnlineStages(player, online_stages)
-    })
+    }).toDF()
   }
 
   /**
@@ -156,7 +156,7 @@ object BeforeGdmPlayerMaxStats {
       val max_dist_shot = line.getAs[Double]("max_dist_shot")
 
       TempGdmMaxDistShot(player, max_dist_shot_match, max_dist_shot)
-    })
+    }).toDF()
   }
 
   /**
@@ -181,7 +181,7 @@ object BeforeGdmPlayerMaxStats {
       val max_suvive_time = line.getAs[Double]("max_suvive_time")
 
       TempGdmMaxSuviveTime(player, max_suvive_time_match, max_suvive_time)
-    })
+    }).toDF()
   }
 
   /**
@@ -206,7 +206,7 @@ object BeforeGdmPlayerMaxStats {
       val max_kills = line.getAs[Int]("max_kills")
 
       TempGdmMaxKills(player, max_kills_match, max_kills)
-    })
+    }).toDF()
   }
 
   /**
@@ -231,7 +231,7 @@ object BeforeGdmPlayerMaxStats {
       val max_assists = line.getAs[Int]("max_assists")
 
       TempGdmMaxAssists(player, max_assists_match, max_assists)
-    })
+    }).toDF()
   }
 
   /**
@@ -248,10 +248,10 @@ object BeforeGdmPlayerMaxStats {
       .select($"player_name".as("player"), $"top_10_count")
     top10Count.map(line => {
       val player = line.getAs[String]("player")
-      val top_10_count = line.getAs[Int]("top_10_count")
+      val top_10_count = line.getAs[Long]("top_10_count").toInt
 
       TempGdmTop10Count(player, top_10_count)
-    })
+    }).toDF()
   }
 
   /**
@@ -276,7 +276,7 @@ object BeforeGdmPlayerMaxStats {
       val max_dist_ride = line.getAs[Double]("max_dist_ride")
 
       TempGdmMaxDistRide(player, max_dist_ride_match, max_dist_ride)
-    })
+    }).toDF()
   }
 
   /**
@@ -301,6 +301,6 @@ object BeforeGdmPlayerMaxStats {
       val max_dist_walk = line.getAs[Double]("max_dist_walk")
 
       TempGdmMaxDistWalk(player, max_dist_walk_match, max_dist_walk)
-    })
+    }).toDF()
   }
 }

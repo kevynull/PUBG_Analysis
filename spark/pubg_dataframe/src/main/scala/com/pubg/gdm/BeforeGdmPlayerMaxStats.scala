@@ -1,7 +1,7 @@
 package com.pubg.gdm
 
 import com.pubg.base.util.ConfigUtil
-import com.pubg.base._
+import com.pubg.base.temp._
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}

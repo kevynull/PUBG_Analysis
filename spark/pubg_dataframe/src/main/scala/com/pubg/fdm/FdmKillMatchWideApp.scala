@@ -1,7 +1,8 @@
 package com.pubg.fdm
 
 import com.pubg.base.util.{ConfigUtil, DateUtils, PositionUtils}
-import com.pubg.base.{BdmAggMatchStats, BdmKillMatchStats, FdmKillMatchWide, TempBdmAggGroupDate}
+import com.pubg.base.{BdmAggMatchStats, BdmKillMatchStats, FdmKillMatchWide}
+import com.pubg.base.temp._
 import org.apache.spark.sql.functions.count
 import org.apache.spark.sql.{SaveMode, SparkSession}
 

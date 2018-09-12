@@ -1,4 +1,4 @@
-package com.pubg.base
+package com.pubg.base.temp
 
 case class TempGdmKillDistance(
   shot_distance:Double,

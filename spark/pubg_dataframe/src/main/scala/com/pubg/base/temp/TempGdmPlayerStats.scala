@@ -1,4 +1,4 @@
-package com.pubg.base
+package com.pubg.base.temp
 
 /**
   * 玩家信息，临时表

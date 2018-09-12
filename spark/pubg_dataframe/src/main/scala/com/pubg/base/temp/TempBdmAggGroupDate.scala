@@ -1,4 +1,4 @@
-package com.pubg.base
+package com.pubg.base.temp
 
 /**
   * 日期，比赛临时表

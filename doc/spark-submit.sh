@@ -188,7 +188,7 @@ spark-submit \
 --conf spark.yarn.driver.memoryOverhead=1024 \
 --num-executors 2 \
 --files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
---conf spark.sql.shuffle.partitions=2000 \
+--conf spark.sql.shuffle.partitions=4000 \
 --conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 

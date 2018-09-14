@@ -36,7 +36,7 @@ object GdmPlayerCareerStatsModelAppTask4 {
       .join(maxDistShot, maxDistShot.col("player") === task3Stats.col("player_name"), "left")
       
     task4Stats.map(line => {
-val name = line.getAs[String]("player_name")
+      val name = line.getAs[String]("player_name")
       val first_play_time = line.getAs[String]("first_play_time")
       val first_play_date = line.getAs[String]("first_play_date")
       val total_kills = line.getAs[Int]("total_kills")

@@ -27,5 +27,5 @@ case class TempGdmPlayerTask6(
   max_suvive_time: Double,
   max_suvive_time_match: String,
   max_kills: Int,
-  max_kills_match: String,
+  max_kills_match: String
 )

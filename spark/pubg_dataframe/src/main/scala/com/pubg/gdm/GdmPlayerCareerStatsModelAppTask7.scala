@@ -20,7 +20,7 @@ object GdmPlayerCareerStatsModelAppTask7 {
     val task6TableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_PLAYER_TASK_6_TEMP
 
     /* 玩家 top 1 统计 */
-    val maxKillsTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_KILLS_PLAYER_TEMP
+    val maxAssistsTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_ASSISTS_PLAYER_TEMP
     
     val targetTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_PLAYER_TASK_7_TEMP
 

@@ -1,6 +1,6 @@
 package com.pubg.base.temp
 
-case class TempGdmPlayerTask8(
+case class TempGdmPlayerTask9(
   first_play_date:String,
   first_play_time:String,
   last_play_time:String,

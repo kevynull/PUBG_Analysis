@@ -1,6 +1,6 @@
 package com.pubg.base.temp
 
-case class TempGdmPlayerTask5(
+case class TempGdmPlayerTask6(
   first_play_date:String,
   first_play_time:String,
   last_play_time:String,
@@ -25,5 +25,7 @@ case class TempGdmPlayerTask5(
   max_dist_shot_match:String,
   max_dist_shot:Double,
   max_suvive_time: Double,
-  max_suvive_time_match: String
+  max_suvive_time_match: String,
+  max_kills: Int,
+  max_kills_match: String,
 )

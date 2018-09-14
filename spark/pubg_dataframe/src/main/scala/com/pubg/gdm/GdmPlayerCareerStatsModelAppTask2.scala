@@ -36,10 +36,9 @@ object GdmPlayerCareerStatsModelAppTask2 {
       .join(lastPlayTime, lastPlayTime.col("player") === task1Stats.col("player_name"), "left")
       
     task2Stats.map(line => {
-      val name = line.getAs[String]("player_name")
+val name = line.getAs[String]("player_name")
       val first_play_time = line.getAs[String]("first_play_time")
       val first_play_date = line.getAs[String]("first_play_date")
-      val last_play_time = line.getAs[String]("last_play_time")
       val total_kills = line.getAs[Int]("total_kills")
       val avg_kills = line.getAs[Double]("avg_kills")
       val total_assists = line.getAs[Int]("total_assists")
@@ -53,8 +52,11 @@ object GdmPlayerCareerStatsModelAppTask2 {
       val party_count = line.getAs[Int]("party_count")
       val total_dbno = line.getAs[Int]("total_dbno")
       val total_dist_ride = line.getAs[Double]("total_dist_ride")
+      val total_dist_walk = line.getAs[Double]("total_dist_walk")
       val count_use_ride = line.getAs[Int]("count_use_ride")
       val kill_death_ratio = line.getAs[Double]("kill_death_ratio")
+
+      val last_play_time = line.getAs[String]("last_play_time")
 
       TempGdmPlayerTask2(first_play_date, first_play_time, last_play_time, name, total_kills,
        avg_kills, total_assists, avg_assists, total_suvive_time, avg_suvive_time, 

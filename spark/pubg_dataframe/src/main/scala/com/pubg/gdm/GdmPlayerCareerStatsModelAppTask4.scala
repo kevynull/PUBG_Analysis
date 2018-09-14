@@ -36,10 +36,9 @@ object GdmPlayerCareerStatsModelAppTask4 {
       .join(maxDistShot, maxDistShot.col("player") === task3Stats.col("player_name"), "left")
       
     task4Stats.map(line => {
-      val name = line.getAs[String]("player_name")
+val name = line.getAs[String]("player_name")
       val first_play_time = line.getAs[String]("first_play_time")
       val first_play_date = line.getAs[String]("first_play_date")
-      val last_play_time = line.getAs[String]("last_play_time")
       val total_kills = line.getAs[Int]("total_kills")
       val avg_kills = line.getAs[Double]("avg_kills")
       val total_assists = line.getAs[Int]("total_assists")
@@ -53,9 +52,14 @@ object GdmPlayerCareerStatsModelAppTask4 {
       val party_count = line.getAs[Int]("party_count")
       val total_dbno = line.getAs[Int]("total_dbno")
       val total_dist_ride = line.getAs[Double]("total_dist_ride")
+      val total_dist_walk = line.getAs[Double]("total_dist_walk")
       val count_use_ride = line.getAs[Int]("count_use_ride")
       val kill_death_ratio = line.getAs[Double]("kill_death_ratio")
+
+      val last_play_time = line.getAs[String]("last_play_time")
+
       val online_stages = line.getAs[Int]("online_stages")
+
       val max_dist_shot = line.getAs[Double]("max_dist_shot")
       val max_dist_shot_match = line.getAs[String]("max_dist_shot_match")
 

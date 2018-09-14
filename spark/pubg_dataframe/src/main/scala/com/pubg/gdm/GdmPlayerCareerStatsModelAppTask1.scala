@@ -36,7 +36,6 @@ object GdmPlayerCareerStatsModelAppTask1 {
     val task1Stats = playerStats
       .join(firstPlayTime, firstPlayTime.col("player") === playerStats.col("player_name"), "left")
       
-
     task1Stats.map(line => {
       val name = line.getAs[String]("player_name")
       val first_play_time = line.getAs[String]("first_play_time")
@@ -54,6 +53,7 @@ object GdmPlayerCareerStatsModelAppTask1 {
       val party_count = line.getAs[Int]("party_count")
       val total_dbno = line.getAs[Int]("total_dbno")
       val total_dist_ride = line.getAs[Double]("total_dist_ride")
+      val total_dist_walk = line.getAs[Double]("total_dist_walk")
       val count_use_ride = line.getAs[Int]("count_use_ride")
       val kill_death_ratio = line.getAs[Double]("kill_death_ratio")
 

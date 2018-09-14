@@ -16,51 +16,23 @@ object GdmPlayerCareerStatsModelAppTask10 {
       .getOrCreate()
 
     /* 玩家聚合统计 */
-    val playerTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_PLAYER_STATS_TEMP
+    val task9TableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_PLAYER_TASK_9_TEMP
 
     /* 玩家 top 1 统计 */
-    val firstPlayTimeTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_FIRST_PLAY_TIME_PLAYER_TEMP
-    val lastPlayTimeTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_LAST_PLAY_TIME_PLAYER_TEMP
-    val onlineStagesTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_ONLINE_STAGES_PLAYER_TEMP
-    val maxDistShotTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_DIST_SHOT_PLAYER_TEMP
-    val maxSuviveTimeTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_SUVIVE_TIME_PLAYER_TEMP
-    val maxKillsTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_KILLS_PLAYER_TEMP
-    val maxAssistsTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_ASSISTS_PLAYER_TEMP
-    val top10CountTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_TOP_10_COUNT_PLAYER_TEMP
-    val maxDistRideTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_DIST_RIDE_PLAYER_TEMP
     val maxDistWalkTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_MAX_DIST_WALK_PLAYER_TEMP
-
 
     val targetTableName = ConfigUtil.DB_NAME + "." + ConfigUtil.GDM_PLAYER_CAREER_STATS_MODEL
 
     //分区字段
     val PARTITION_BY = "first_play_date" //first_play_date
 
-    val playerStats = spark.table(playerTableName)
+    val task9Stats = spark.table(task9TableName)
 
-    val firstPlayTime = spark.table(firstPlayTimeTableName)
-    val lastPlayTime = spark.table(lastPlayTimeTableName)
-    val onlineStages = spark.table(onlineStagesTableName)
-    val maxDistShot = spark.table(maxDistShotTableName)
-    val maxSuviveTime = spark.table(maxSuviveTimeTableName)
-    val maxKills = spark.table(maxKillsTableName)
-    val maxAssists = spark.table(maxAssistsTableName)
-    val top10Count = spark.table(top10CountTableName)
-    val maxDistRide = spark.table(maxDistRideTableName)
     val maxDistWalk = spark.table(maxDistWalkTableName)
     /* 玩家聚合统计 */
     import spark.implicits._
-    val gdmPlayerCareerStats = playerStats
-      .join(firstPlayTime, firstPlayTime.col("player") === playerStats.col("player_name"), "left")
-      .join(lastPlayTime, lastPlayTime.col("player") === playerStats.col("player_name"), "left")
-      .join(onlineStages, onlineStages.col("player") === playerStats.col("player_name"), "left")
-      .join(maxDistShot, maxDistShot.col("player") === playerStats.col("player_name"), "left")
-      .join(maxSuviveTime, maxSuviveTime.col("player") === playerStats.col("player_name"), "left")
-      .join(maxKills, maxKills.col("player") === playerStats.col("player_name"), "left")
-      .join(maxAssists, maxAssists.col("player") === playerStats.col("player_name"), "left")
-      .join(top10Count, top10Count.col("player") === playerStats.col("player_name"), "left")
-      .join(maxDistRide, maxDistRide.col("player") === playerStats.col("player_name"), "left")
-      .join(maxDistWalk, maxDistWalk.col("player") === playerStats.col("player_name"), "left")
+    val gdmPlayerCareerStats = task9Stats
+      .join(maxDistWalk, maxDistWalk.col("player") === task9Stats.col("player_name"), "left")
 
     gdmPlayerCareerStats.map(line => {
       val name = line.getAs[String]("player_name")

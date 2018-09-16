@@ -73,12 +73,7 @@ object GdmPlayerCareerStatsModelAppTask9 {
       val max_assists = line.getAs[Int]("max_assists")
       val max_assists_match = line.getAs[String]("max_assists_match")
 
-      val top_10_count = line.getAs[Int]("top_10_count")
-      val top_10_ratio = if (play_count > 0) {
-        top_10_count / play_count
-      } else {
-        top_10_count / 1
-      }
+      val top_10_ratio = line.getAs[Double]("top_10_ratio")
 
       val max_dist_ride = line.getAs[Double]("max_dist_ride")
       val max_dist_ride_match = line.getAs[String]("max_dist_ride_match")

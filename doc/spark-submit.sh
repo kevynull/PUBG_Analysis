@@ -119,6 +119,151 @@ spark-submit \
 --conf spark.io.compression.codec=lz4 \
 /root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
 
+
+################################################
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask1 \
+--name GdmPlayerCareerStatsModelAppTask1 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask2 \
+--name GdmPlayerCareerStatsModelAppTask2 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask3 \
+--name GdmPlayerCareerStatsModelAppTask3 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask4 \
+--name GdmPlayerCareerStatsModelAppTask4 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask5 \
+--name GdmPlayerCareerStatsModelAppTask5 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask6 \
+--name GdmPlayerCareerStatsModelAppTask6 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask7 \
+--name GdmPlayerCareerStatsModelAppTask7 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask8 \
+--name GdmPlayerCareerStatsModelAppTask8 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask9 \
+--name GdmPlayerCareerStatsModelAppTask9 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+spark-submit \
+--class com.pubg.gdm.GdmPlayerCareerStatsModelAppTask10 \
+--name GdmPlayerCareerStatsModelAppTask10 \
+--master yarn \
+--deploy-mode cluster \
+--executor-memory 6G \
+--driver-memory 6G \
+--conf spark.yarn.executor.memoryOverhead=512 \
+--conf spark.yarn.driver.memoryOverhead=512 \
+--num-executors 2 \
+--files /usr/lib/server/spark-2.0.2-bin-hadoop2.7/conf/hive-site.xml \
+--conf spark.io.compression.codec=lz4 \
+/root/jars/pubg_dataframe-1.0-SNAPSHOT.jar
+
+################################################
+
 ##
 # bdm层中的数据，聚合统计。存储到gdm层
 # gdm_player_match_stats_pageview

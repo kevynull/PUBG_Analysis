@@ -69,12 +69,7 @@ object GdmPlayerCareerStatsModelAppTask10 {
       val max_assists_match = line.getAs[String]("max_assists_match")
       val count_use_ride = line.getAs[Int]("count_use_ride")
       val kill_death_ratio = line.getAs[Double]("kill_death_ratio")
-      val top_10_count = line.getAs[Int]("top_10_count")
-      val top_10_ratio = if (play_count > 0) {
-        top_10_count / play_count
-      } else {
-        top_10_count / 1
-      }
+      val top_10_ratio = line.getAs[Double]("top_10_ratio")
 
       GdmPlayerCareerStatsModel(name, first_play_time, first_play_date, last_play_time, total_kills, avg_kills,
         total_assists, avg_assists, total_suvive_time, avg_suvive_time, total_dmg, avg_dmg,
